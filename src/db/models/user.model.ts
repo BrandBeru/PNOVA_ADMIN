@@ -7,7 +7,9 @@ const UserSchema: Schema = new Schema<IUser>({
     type: String,
     unique: true
   },
-  name: String,
+  name: {
+    type: String
+  },
   lastName: {
     type: String,
   },
@@ -16,6 +18,11 @@ const UserSchema: Schema = new Schema<IUser>({
     unique: true
   },
   password: String,
+  role: {
+    type: String,
+    required: true,
+    default: 'client'
+  },
   meta: {
     createdDate: {
       type: Date,
@@ -32,6 +39,6 @@ const UserSchema: Schema = new Schema<IUser>({
   }
 })
 
-const User = mongoose.model(USER_DOCUMENT, UserSchema)
+const User = mongoose.models['users'] || mongoose.model(USER_DOCUMENT, UserSchema)
 
 export {USER_DOCUMENT, UserSchema, User}

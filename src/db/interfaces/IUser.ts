@@ -4,6 +4,7 @@ interface IUser{
   lastName: String;
   email: String,
   password: String,
+  role: String,
   meta: {
     createdDate: String;
     modifiedDate: String;

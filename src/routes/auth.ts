@@ -22,7 +22,7 @@ router.post(
 router.get("/google", passport.authenticate("google", {scope: ['email', 'profile']}));
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate("google", { failureRedirect: "/" }),
   (req, res, next) => {
     res.redirect("/");
   },

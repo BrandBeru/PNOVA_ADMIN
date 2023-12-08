@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const GROUP_DOCUMENT = "group";
+const GROUP_DOCUMENT = "groups";
 
 const GroupSchema = new Schema<IGroup>({
   chatId: { type: String, required: true, unique: true },
@@ -12,6 +12,9 @@ const GroupSchema = new Schema<IGroup>({
       unique: true
     }],
     required: true
+  },
+  meta: {
+
   }
 });
 

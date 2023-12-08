@@ -1,8 +1,10 @@
-interface IGroup{
-  chatId: String,
+interface IService{
   name: String,
+  faviconUrl: String,
   description: String,
-  admins: [],
+  price: Number,
+  deliverTime: Number,
+  imagesUrl: [String],
   meta: {
     createdDate: String,
     modifiedDate: String,

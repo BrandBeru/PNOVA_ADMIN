@@ -14,10 +14,11 @@ function checkApiKey(req:Request, res:Response, next:NextFunction){
 function checkRoles(...roles:Array<string>){
   return (req:any,res:any, next:NextFunction) => {
     const user = req.user
+    console.log(user.scope)
     if(roles.includes(user.scope)){
       next()
     }else{
-      next(boom.unauthorized)
+      throw boom.unauthorized()
     }
   }
 }

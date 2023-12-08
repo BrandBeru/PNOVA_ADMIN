@@ -1,0 +1,17 @@
+import mongoose, { Schema } from "mongoose"
+
+const RATE_DOCUMENT = 'rates'
+
+const RateSchema = new Schema<IRate>({
+  userId: {type: mongoose.Schema.Types.ObjectId, required: true},
+  serviceId: {type: mongoose.Schema.Types.ObjectId, required: true},
+  rate: {type: Number, required: true},
+  message: {type: String},
+  meta: {
+    createdDate: {type: String, default: new Date()},
+    modifiedDate: {type: String, default: new Date()},
+  }
+})
+
+const Rate = mongoose.model(RATE_DOCUMENT, RateSchema)
+export {RATE_DOCUMENT, RateSchema, Rate}

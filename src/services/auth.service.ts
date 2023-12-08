@@ -20,7 +20,7 @@ class AuthService{
   async signToken(user:any){
     const payload = {
       sub: user._id,
-      scope: "client"
+      scope: user.role
     }
     const secret:string = config.jwtSecret || ''
     const token = jwt.sign(payload, secret)
