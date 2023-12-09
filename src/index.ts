@@ -10,7 +10,7 @@ import session from "express-session";
 
 const app: Express = express();
 const host:any = config.host;
-const port:any = config.port;
+const port:any = config.port || 3000;
 
 app.set('trust proxy', 1)
 const secret:any = config.jwtSecret;
