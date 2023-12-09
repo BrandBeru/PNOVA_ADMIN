@@ -4,7 +4,7 @@ interface IService{
   description: String,
   price: Number,
   deliverTime: Number,
-  imagesUrl: [String],
+  imagesUrl: [],
   meta: {
     createdDate: String,
     modifiedDate: String,

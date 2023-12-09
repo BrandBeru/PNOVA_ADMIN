@@ -6,7 +6,10 @@ class RateService{
     return rate;
   }
   async find(){
-    const rates = await Rate.find({})
+    const rates = await Rate.find({}).populate({
+      path: 'userId',
+      select: 'username, name, lastName, email, meta'
+    })
     return rates
   }
   async findByUserId(id: string){
