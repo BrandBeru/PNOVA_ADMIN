@@ -21,7 +21,7 @@ app.use(session({
 mongoConnection()
 app.use(express.json())
 
-const whiteList = ['http://localhost:5500', '*', 'null']
+const whiteList = ['http://localhost:5500', 'http://127.0.0.1:5500', '*', 'null']
 const options = {
   origin: (req:any, callback:any) => {
     if(whiteList.includes(req)){
