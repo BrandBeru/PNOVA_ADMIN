@@ -21,14 +21,14 @@ app.use(session({
 mongoConnection()
 app.use(express.json())
 
-const whiteList = ['http://localhost:5500', 'http://127.0.0.1:5500', '*', 'null']
+const whiteList = ['http://localhost:5500', 'http://127.0.0.1:5500', '*']
 const options = {
   origin: (req:any, callback:any) => {
     if(whiteList.includes(req)){
       callback(null, true)
       return
     }
-    callback(new Error('not allow to: ' + req), false)
+    callback(null, true)
   }
 }
 app.use(cors(options))

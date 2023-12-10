@@ -23,14 +23,14 @@ app.use((0, express_session_1.default)({
 }));
 (0, mongoose_1.default)();
 app.use(express_1.default.json());
-const whiteList = ['http://localhost:5500', '*', 'null'];
+const whiteList = ['http://localhost:5500', 'http://127.0.0.1:5500', '*'];
 const options = {
     origin: (req, callback) => {
         if (whiteList.includes(req)) {
             callback(null, true);
             return;
         }
-        callback(new Error('not allow to: ' + req), false);
+        callback(null, true);
     }
 };
 app.use((0, cors_1.default)(options));
