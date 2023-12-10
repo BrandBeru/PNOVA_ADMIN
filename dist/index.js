@@ -10,9 +10,10 @@ const config_1 = __importDefault(require("./config/config"));
 const error_handler_1 = require("./middlewares/error.handler");
 const passport_1 = __importDefault(require("passport"));
 const express_session_1 = __importDefault(require("express-session"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const host = config_1.default.host;
-const port = config_1.default.port;
+const port = config_1.default.port || 3000;
 app.set('trust proxy', 1);
 const secret = config_1.default.jwtSecret;
 app.use((0, express_session_1.default)({
@@ -22,8 +23,19 @@ app.use((0, express_session_1.default)({
 }));
 (0, mongoose_1.default)();
 app.use(express_1.default.json());
+const whiteList = ['http://localhost:5500', '*', 'null'];
+const options = {
+    origin: (req, callback) => {
+        if (whiteList.includes(req)) {
+            callback(null, true);
+            return;
+        }
+        callback(new Error('not allow to: ' + req), false);
+    }
+};
+app.use((0, cors_1.default)(options));
 app.get("/", (req, res) => {
-    res.render("<body><h1>BeruChat is working: Go to [/api/v1/auth/login] and get logged</h1></body>", { title: 'EG-CHAT' });
+    res.send("BeruChat is working: Go to [/api/v1/auth/login] and get logged");
 });
 require('./utils/auth');
 (0, routes_1.default)(app);

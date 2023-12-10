@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 const config = {
     env: process.env.NODE_ENV,
-    port: process.env.NODE_PORT,
+    port: process.env.PORT,
     host: process.env.NODE_HOST,
     dbUser: process.env.DB_USER,
     dbPassword: process.env.DB_PASSWORD,

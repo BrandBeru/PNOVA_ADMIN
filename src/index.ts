@@ -3,10 +3,9 @@ import routerApi from "./routes";
 import mongoConnection from "./libs/mongoose";
 import config from "./config/config";
 import { boomErrorHandler, errorHandler, logError, ormErrorHandler } from "./middlewares/error.handler";
-import { checkApiKey } from "./middlewares/auth.handler";
 import passport from "passport";
 import session from "express-session";
-
+import cors from 'cors'
 
 const app: Express = express();
 const host:any = config.host;
@@ -22,8 +21,20 @@ app.use(session({
 mongoConnection()
 app.use(express.json())
 
+const whiteList = ['http://localhost:5500', '*', 'null']
+const options = {
+  origin: (req:any, callback:any) => {
+    if(whiteList.includes(req)){
+      callback(null, true)
+      return
+    }
+    callback(new Error('not allow to: ' + req), false)
+  }
+}
+app.use(cors(options))
+
 app.get("/", (req: Request, res: Response) => {
-  res.render("<body><h1>BeruChat is working: Go to [/api/v1/auth/login] and get logged</h1></body>", {title: 'EG-CHAT'});
+  res.send("BeruChat is working: Go to [/api/v1/auth/login] and get logged");
 });
 require('./utils/auth')
 routerApi(app)
