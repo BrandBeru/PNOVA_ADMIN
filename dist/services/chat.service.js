@@ -80,6 +80,15 @@ class ChatService {
             return chats;
         });
     }
+    findChatById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const chat = yield chat_model_1.Chat.findOne({ _id: id }).populate({
+                path: 'members',
+                select: 'name _id username email name lastName meta'
+            });
+            return chat;
+        });
+    }
     deleteChat(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield chat_model_1.Chat.deleteOne({ _id: id });

@@ -11,6 +11,9 @@ const config = {
     dbHost: process.env.DB_HOST,
     dbPort: process.env.DB_PORT,
     jwtSecret: process.env.JWT_SECRET,
-    apiKey: process.env.API_KEY
+    apiKey: process.env.API_KEY,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackUrl: process.env.CALLBACK_URL
 };
 exports.default = config;

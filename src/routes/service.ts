@@ -3,7 +3,7 @@ import Service from "../services/service.service";
 import passport from "passport";
 import { checkRoles } from "../middlewares/auth.handler";
 import validatorHandler from "../middlewares/validator.handler";
-import { createServiceSchema } from "../schemas/services.schema";
+import { createServiceSchema, findServiceSchema } from "../schemas/services.schema";
 
 const service = new Service();
 const router = Router();
@@ -38,8 +38,7 @@ router.post(
 );
 router.get(
   "/:id",
-  passport.authenticate("jwt"),
-  checkRoles("admin"),
+  validatorHandler(findServiceSchema,"params"),
   (req, res, next) => {
     try {
       const { id } = req.params;
@@ -50,5 +49,14 @@ router.get(
     }
   },
 );
+router.patch("/:id", (req, res, next) => {
+  try{
+    const {id} = req.params
+    const rta = service.updateById(id)
+    res.json(rta)
+  }catch(error){
+    next(error)
+  }
+})
 
 export default router;

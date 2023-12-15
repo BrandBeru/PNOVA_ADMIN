@@ -1,20 +1,50 @@
 import GoogleOAuth2 from 'passport-google-oauth20'
+import config from '../../../config/config'
+import UserService from '../../../services/user.service'
+import boom from '@hapi/boom'
+import mongoose from 'mongoose'
+import AuthService from '../../../services/auth.service'
 
 const GoogleStrategy = GoogleOAuth2.Strategy
+const service = new UserService()
+const auth = new AuthService()
 
-const options = {
-  clientID: '988821143071-h765n0ffhvndm52p7ofgkkp0e44puu4e.apps.googleusercontent.com',
-  clientSecret: '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',
-  callbackURL: '/api/v1/auth/google/callback',
+const options:any = {
+  clientID: config.clientId,
+  clientSecret: config.clientSecret,
+  callbackURL: config.callbackUrl,
 }
-const verifyHandler = (accessToken:any, refreshToken:any, profile:any, cb:any, done:any) => {
-  const data = {
-    id: cb.id,
-    name: cb.displayName,
-    email: cb.emails[0].value,
-    emailVerified: cb.emails[0].verified
+const verifyHandler = async (accessToken:any, refreshToken:any, profile:any, cb:any, done:any) => {
+  try{
+    const user = await service.existUsersByEmail(cb.emails[0].value)
+    if(user){
+      const token = login(user)
+      return done(null, token)
+    }
+    const password = await fetch('https://passwordinator.onrender.com?num=true&char=true&caps=true&len=32').then(data => data.json())
+    const data:any = {
+      name: cb.name.givenName,
+      lastName: cb.name.familyName,
+      username: `user${cb.id}`,
+      email: cb.emails[0].value,
+      password: password,
+    }
+    const rta = await service.create(data)
+    const token = login(rta)
+    return done(null, token)
+  }catch(error:any){
+    throw boom.conflict(error)
   }
-  return done(null, data)
+}
+async function login(user:any){
+  const token = await fetch(`http://localhost:${config.port}/api/v1/auth/login`, {
+    method: 'POST',
+    body: JSON.stringify({
+      email: user.email,
+      password: user.password
+    })
+  })
+  return token
 }
 
 const GoogleOAuth = new GoogleStrategy(options, verifyHandler)

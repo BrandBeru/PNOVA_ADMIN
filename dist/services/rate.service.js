@@ -17,19 +17,29 @@ class RateService {
             return rate;
         });
     }
-    find() {
+    find(skip, limit) {
         return __awaiter(this, void 0, void 0, function* () {
             const rates = yield rate_model_1.Rate.find({}).populate({
                 path: 'userId',
                 select: 'username, name, lastName, email, meta'
-            });
+            }).skip(skip).limit(limit);
             return rates;
         });
     }
     findByUserId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rate = yield rate_model_1.Rate.find({ userId: id });
+            const rate = yield rate_model_1.Rate.findOne({ userId: id });
             return rate;
+        });
+    }
+    findByRate(rate, asc, skip, limit) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const sort = asc ? 1 : -1;
+            const rates = yield rate_model_1.Rate.find({ rate: rate })
+                .sort({ rate: sort })
+                .skip(skip)
+                .limit(limit);
+            return rates;
         });
     }
     findByServiceId(id) {

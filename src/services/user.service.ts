@@ -50,6 +50,9 @@ class UserService{
   async existUsers(...users:Array<String>){
     return await User.find({_id: {$in: users}})
   }
+  async existUsersByEmail(...users:Array<String>){
+    return await User.find({email: {$in: users}})
+  }
 }
 
 export default UserService

@@ -11,19 +11,27 @@ const error_handler_1 = require("./middlewares/error.handler");
 const passport_1 = __importDefault(require("passport"));
 const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
+const http_1 = require("http");
 const app = (0, express_1.default)();
+const server = (0, http_1.createServer)(app);
 const host = config_1.default.host;
 const port = config_1.default.port || 3000;
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 const secret = config_1.default.jwtSecret;
-app.use((0, express_session_1.default)({
+const days = 1000 * 60 * 60 * 24 * 15;
+const sessionMidddleware = (0, express_session_1.default)({
     secret: secret,
     resave: false,
     saveUninitialized: true,
-}));
+    cookie: { maxAge: days }
+});
+app.use(sessionMidddleware);
 (0, mongoose_1.default)();
+/**
+ * Chat section
+ */
 app.use(express_1.default.json());
-const whiteList = ['http://localhost:5500', 'http://127.0.0.1:5500', '*'];
+const whiteList = ["http://localhost:5500", "http://127.0.0.1:5500", "*"];
 const options = {
     origin: (req, callback) => {
         if (whiteList.includes(req)) {
@@ -31,20 +39,20 @@ const options = {
             return;
         }
         callback(null, true);
-    }
+    },
 };
 app.use((0, cors_1.default)(options));
 app.get("/", (req, res) => {
-    res.send("BeruChat is working: Go to [/api/v1/auth/login] and get logged");
+    res.send('PNOVA\\VIGE STUDIOS');
 });
-require('./utils/auth');
-(0, routes_1.default)(app);
+require("./utils/auth");
+(0, routes_1.default)(app, server);
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use(error_handler_1.logError);
 app.use(error_handler_1.ormErrorHandler);
 app.use(error_handler_1.boomErrorHandler);
 app.use(error_handler_1.errorHandler);
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`🌐[server]: Server is running at ${host}:${port}`);
 });

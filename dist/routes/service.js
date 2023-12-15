@@ -30,10 +30,20 @@ router.post("/", (0, validator_handler_1.default)(services_schema_1.createServic
         next(error);
     }
 });
-router.get("/:id", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("admin"), (req, res, next) => {
+router.get("/:id", (0, validator_handler_1.default)(services_schema_1.findServiceSchema, "params"), (req, res, next) => {
     try {
         const { id } = req.params;
         const rta = service.findById(id);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+router.patch("/:id", (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const rta = service.updateById(id);
         res.json(rta);
     }
     catch (error) {

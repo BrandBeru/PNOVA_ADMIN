@@ -10,12 +10,12 @@ const chat_1 = __importDefault(require("./chat"));
 const group_1 = __importDefault(require("./group"));
 const service_1 = __importDefault(require("./service"));
 const rate_1 = __importDefault(require("./rate"));
-function routerApi(app) {
+function routerApi(app, server) {
     const router = express_1.default.Router();
     app.use('/api/v1', router);
     router.use('/auth', auth_1.default);
     router.use('/users', users_1.default);
-    router.use('/chats', chat_1.default);
+    router.use('/chats', (0, chat_1.default)(server));
     router.use('/groups', group_1.default);
     router.use('/services', service_1.default);
     router.use('/rates', rate_1.default);

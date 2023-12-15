@@ -30,6 +30,12 @@ class ServiceService {
             return service;
         });
     }
+    updateById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rta = yield service_model_1.Service.updateOne({ _id: id });
+            return rta;
+        });
+    }
     remove() {
         return __awaiter(this, void 0, void 0, function* () {
         });

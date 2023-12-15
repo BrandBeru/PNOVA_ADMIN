@@ -23,20 +23,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Rate = exports.RateSchema = exports.RATE_DOCUMENT = void 0;
+exports.Order = exports.OrderSchema = exports.ORDER_DOCUMENT = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const RATE_DOCUMENT = "rates";
-exports.RATE_DOCUMENT = RATE_DOCUMENT;
-const RateSchema = new mongoose_1.Schema({
-    userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
-    serviceId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'services', required: true },
-    rate: { type: Number, required: true },
-    message: { type: String },
+const ORDER_DOCUMENT = "orders";
+exports.ORDER_DOCUMENT = ORDER_DOCUMENT;
+const OrderSchema = new mongoose_1.Schema({
+    clientId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: "users" },
+    serviceId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: "services" },
+    deliverDate: { type: String, default: new Date() },
+    aditionalInformation: { type: String },
+    reviews: { type: mongoose_1.default.Schema.Types.Number, required: true },
+    priority: { type: mongoose_1.default.Schema.Types.Boolean },
     meta: {
         createdDate: { type: mongoose_1.default.Schema.Types.Date, default: new Date() },
         modifiedDate: { type: mongoose_1.default.Schema.Types.Date, default: new Date() },
-    },
+        payment: { type: mongoose_1.default.Schema.Types.Boolean, default: false },
+        delivered: { type: mongoose_1.default.Schema.Types.Boolean, default: false }
+    }
 });
-exports.RateSchema = RateSchema;
-const Rate = mongoose_1.default.model(RATE_DOCUMENT, RateSchema);
-exports.Rate = Rate;
+exports.OrderSchema = OrderSchema;
+const Order = mongoose_1.default.model(ORDER_DOCUMENT, OrderSchema);
+exports.Order = Order;

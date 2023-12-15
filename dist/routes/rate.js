@@ -22,12 +22,32 @@ router.post("/", (0, validator_handler_1.default)(rate_schema_1.createRateSchema
     }
 });
 router.get("/", (req, res, next) => {
-    const rta = service.find();
-    res.json(rta);
-});
-router.get("/user/:id", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => {
     try {
-        const { id } = req.params;
+        const skip = req.params.skip;
+        const limit = req.params.limit;
+        const rta = service.find(skip, limit);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+router.get("/:level", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), (req, res, next) => {
+    try {
+        const skip = req.params.skip;
+        const limit = req.params.limit;
+        const ascend = req.params.asc;
+        const { level } = req.params;
+        const rta = service.findByRate(level, ascend, skip, limit);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+router.get("/user", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => {
+    try {
+        const id = req.user.sub;
         const rta = service.findByUserId(id);
         res.json(rta);
     }
@@ -35,7 +55,17 @@ router.get("/user/:id", (0, validator_handler_1.default)(rate_schema_1.findRateB
         next(error);
     }
 });
-router.get("/service/:id", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => {
+router.get("/user/:id", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("admin"), (req, res, next) => {
+    try {
+        const id = req.user.sub;
+        const rta = service.findByUserId(id);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+router.get("/service/:id", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), (req, res, next) => {
     const { id } = req.params;
     const rta = service.findByServiceId(id);
     res.json(rta);

@@ -1,6 +1,8 @@
 import passport from "passport";
 import AuthService from "../services/auth.service";
 import express from "express";
+import validatorHandler from "../middlewares/validator.handler";
+import { loginUserSchema } from "../schemas/auth.schema";
 
 const router = express.Router();
 const service = new AuthService();
@@ -12,7 +14,6 @@ router.post(
     try {
       const user = req.user;
       const rta = await service.signToken(user);
-      console.log(rta);
       res.json(rta);
     } catch (error) {
       next(error);

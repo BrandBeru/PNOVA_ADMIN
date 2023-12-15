@@ -13,6 +13,10 @@ class ServiceService {
     const service = await Service.find({_id: id})
     return service
   }
+  async updateById(id: string){
+    const rta = await Service.updateOne({_id: id})
+    return rta
+  }
   async remove(){
 
   }

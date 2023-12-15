@@ -21,7 +21,6 @@ router.post("/login", passport_1.default.authenticate("local", { session: false 
     try {
         const user = req.user;
         const rta = yield service.signToken(user);
-        console.log(rta);
         res.json(rta);
     }
     catch (error) {

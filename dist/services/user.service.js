@@ -71,5 +71,10 @@ class UserService {
             return yield user_model_1.User.find({ _id: { $in: users } });
         });
     }
+    existUsersByEmail(...users) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield user_model_1.User.find({ email: { $in: users } });
+        });
+    }
 }
 exports.default = UserService;

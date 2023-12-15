@@ -23,18 +23,53 @@ router.post(
     }
   },
 );
-router.get("/", (req, res, next) => {
-  const rta = service.find();
-  res.json(rta);
+router.get("/", (req:any, res:any, next) => {
+  try{
+    const skip = req.params.skip
+    const limit = req.params.limit
+    const rta = service.find(skip, limit);
+    res.json(rta);
+  }catch(error){
+    next(error)
+  }
 });
+router.get("/:level",
+validatorHandler(findRateByUserSchema, "params"),
+(req:any, res:any, next) => {
+  try{
+    const skip = req.params.skip
+    const limit = req.params.limit
+    const ascend = req.params.asc
+    const {level} = req.params
+    const rta = service.findByRate(level, ascend, skip, limit)
+    res.json(rta)
+  }catch(error){
+    next(error)
+  }
+})
+router.get(
+  "/user",
+  validatorHandler(findRateByUserSchema, "params"),
+  passport.authenticate("jwt"),
+  checkRoles("client"),
+  (req:any, res, next) => {
+    try{
+      const id = req.user.sub
+      const rta = service.findByUserId(id)
+      res.json(rta)
+    }catch(error){
+      next(error)
+    }
+  }
+);
 router.get(
   "/user/:id",
   validatorHandler(findRateByUserSchema, "params"),
   passport.authenticate("jwt"),
-  checkRoles("client"),
-  (req, res, next) => {
+  checkRoles("admin"),
+  (req:any, res, next) => {
     try{
-      const {id} = req.params
+      const id = req.user.sub
       const rta = service.findByUserId(id)
       res.json(rta)
     }catch(error){
@@ -45,8 +80,6 @@ router.get(
 router.get(
   "/service/:id",
   validatorHandler(findRateByUserSchema, "params"),
-  passport.authenticate("jwt"),
-  checkRoles("client"),
   (req, res, next) => {
     const {id} = req.params
     const rta = service.findByServiceId(id)

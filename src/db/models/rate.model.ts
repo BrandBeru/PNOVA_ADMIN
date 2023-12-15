@@ -8,8 +8,8 @@ const RateSchema = new Schema<IRate>({
   rate: { type: Number, required: true },
   message: { type: String },
   meta: {
-    createdDate: { type: String, default: new Date() },
-    modifiedDate: { type: String, default: new Date() },
+    createdDate: { type: mongoose.Schema.Types.Date, default: new Date() },
+    modifiedDate: { type: mongoose.Schema.Types.Date, default: new Date() },
   },
 });
 

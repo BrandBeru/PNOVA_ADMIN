@@ -58,6 +58,13 @@ class ChatService{
     })
     return chats
   }
+  async findChatById(id: string){
+    const chat = await Chat.findOne({_id: id}).populate({
+      path: 'members',
+      select: 'name _id username email name lastName meta'
+    })
+    return chat
+  }
   async deleteChat(id: string){
     const data = await Chat.deleteOne({_id: id})
     return data

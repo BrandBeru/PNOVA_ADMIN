@@ -8,8 +8,6 @@ import {
 import validatorHandler from "../middlewares/validator.handler";
 import passport from "passport";
 import { checkRoles } from "../middlewares/auth.handler";
-import MongooseHandler from "../middlewares/mongoose.handler";
-import { UserSchema } from "../db/models/user.model";
 
 const router: Router = express.Router();
 
