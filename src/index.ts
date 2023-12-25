@@ -49,11 +49,11 @@ const options = {
 };
 app.use(cors(options));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send('PNOVA\\VIGE STUDIOS')
+app.get("/", (req: any, res: Response, next) => {
+  res.send('PNOVA\\VIGE STUDIOS - user: ')
 });
 require("./utils/auth");
-routerApi(app, server);
+routerApi(app, server,sessionMidddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());

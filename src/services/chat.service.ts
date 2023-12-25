@@ -1,8 +1,11 @@
 import boom from "@hapi/boom"
 import { Chat } from "../db/models/chat.model"
 import UserService from "./user.service"
+import { decryption, encryption } from "../utils/encrypt"
+import { string } from "joi"
 
 const user = new UserService()
+
 
 class ChatService{
   async create(...members: Array<string>){
@@ -17,23 +20,21 @@ class ChatService{
       throw boom.badData()
     }
   }
-  async getById(...ids:Array<string>){
-    try{
-      const users = await user.getUserById(...ids)
-      return users
-    }catch(error){
-      throw boom.unauthorized()
-    }
-  }
   async sendMessage(chatId:string, userId:string, body:IMessage){
+    const password:any = await encryption(body.text.toString())
     const message = {
       ...body,
-      transmitter: userId
+      transmitter: userId,
+      text: password.ciph,
+      iv: password.iv
     }
     const data = await Chat.updateOne({_id: chatId}, {$push: {
       messages: message
     }})
     return data
+  }
+  async getMessages(chatId:string){
+    const data = await Chat.find
   }
   /**
    *
@@ -59,11 +60,24 @@ class ChatService{
     return chats
   }
   async findChatById(id: string){
-    const chat = await Chat.findOne({_id: id}).populate({
-      path: 'members',
-      select: 'name _id username email name lastName meta'
-    })
-    return chat
+    try{
+      const chat = await Chat.findOne({_id: id}).populate({
+        path: 'members',
+        select: 'name _id username email name lastName meta'
+      })
+      const messages  = new Array()
+      chat?.messages.forEach(async ({text, iv}) => {
+        const decrypt:any = await decryption(text.toString(),iv)
+        messages.push(decrypt)
+      })
+      const object = {
+        chat,
+        messages: messages
+      }
+      return object
+    }catch(err){
+      throw boom.badRequest()
+    }
   }
   async deleteChat(id: string){
     const data = await Chat.deleteOne({_id: id})

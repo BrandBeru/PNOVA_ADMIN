@@ -36,6 +36,7 @@ const ChatSchema = new mongoose_1.Schema({
             required: true,
         },
     ],
+    channelId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'channels', required: true },
     messages: [
         {
             _id: {
@@ -56,6 +57,7 @@ const ChatSchema = new mongoose_1.Schema({
                 type: String,
                 required: true,
             },
+            iv: { type: String },
             meta: {
                 createdDate: {
                     type: mongoose_1.default.Schema.Types.Date,

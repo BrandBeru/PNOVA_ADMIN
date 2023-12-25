@@ -1,5 +1,4 @@
-interface IGroup{
-  chatId: String,
+interface IChannel{
   name: String,
   description: String,
   admins: [],

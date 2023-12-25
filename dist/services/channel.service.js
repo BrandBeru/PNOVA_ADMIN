@@ -10,17 +10,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const channel_model_1 = require("../db/models/channel.model");
-class GroupService {
-    create(body, adminId) {
+class ChannelService {
+    create(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = Object.assign(Object.assign({}, body), { admins: [adminId] });
-            const group = yield channel_model_1.Group.create(data);
-            return group;
+            const channel = channel_model_1.Group.create(body);
+            return channel;
         });
     }
-    findByMember() {
+    find() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const channels = channel_model_1.Group.find({});
+            return channels;
+        });
+    }
+    findOne(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const channel = channel_model_1.Group.findOne({ _id: id });
+            return channel;
+        });
+    }
+    updateOne(id, body) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    deleteOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
         });
     }
 }
-exports.default = GroupService;
+exports.default = ChannelService;

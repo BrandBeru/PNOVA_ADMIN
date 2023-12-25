@@ -21,6 +21,10 @@ class UserService{
     }
     return user
   }
+  async getUsernameById(id: string){
+    const user = await User.findOne({_id:id},{username:1, _id:0})
+    return user.username
+  }
   async findByEmail(email: string){
     const user = await User.findOne({email: email})
     return user

@@ -8,30 +8,40 @@ import {
 import ChatService from "../services/chat.service";
 import express, { NextFunction, Router } from "express";
 import { Server } from "socket.io";
-import expressSocketIoSession from 'express-socket.io-session'
 import { join } from "path";
+import socketioJwt from 'socketio-jwt'
+import config from "../config/config";
+import UserService from "../services/user.service";
 
 const service = new ChatService();
+const userService = new UserService()
 const router = express.Router();
 
-export default function chatRouter(server: any){
+export default function chatRouter(server: any,session:any){
   const io = new Server(server,{
-    connectionStateRecovery: {},
-    cors: {
-      origin: ['http://localhost:5500']
-    }
+    connectionStateRecovery: {}
   })
+  io.use(socketioJwt.authorize({
+    secret: config.jwtSecret,
+    handshake: true
+  }))
   io.on('connection', async (socket) => {
-    const user = (await fetch('https://randomuser.me/api/').then(data => data.json()))
-    const id = user.results[0].name.first
-    socket.on('message', async (msg) => {
-      const token = socket.handshake.auth.token
-      const chatId = socket.handshake.auth.chatId
-      const user = socket.handshake.auth.user
-      console.log(chatId, user)
-      io.emit("message", msg, id)
+    const chatId = socket.handshake.auth.chatId
+    const user = socket.decoded_token.sub
+    socket.on(`${chatId}`, async (msg) => {
+      const message = <IMessage>{
+        text: msg,
+        transmitter: user
+      }
+      const username = await userService.getUsernameById(user)
+      saveMessage(chatId, user, message)
+      io.emit(`${chatId}`, msg, username)
     })
   })
+  const saveMessage = async (chatId: string, user:string, msg:IMessage) => {
+    const saved = await service.sendMessage(chatId, user, msg)
+    return saved
+  }
   router.get(
     "/",
     passport.authenticate("jwt", { session: true }),
@@ -50,9 +60,11 @@ export default function chatRouter(server: any){
     async (req, res, next) => {
       try{
         const {id} = req.params
-        const chat = service.findChatById(id)
+        const chat = await service.findChatById(id)
 
-        res.sendFile(join(__dirname, '../index.html'))
+        res.json(chat)
+
+        //res.sendFile(join(__dirname, '../index.html'))
       }catch(error){
         next(error)
       }

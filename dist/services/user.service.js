@@ -38,6 +38,12 @@ class UserService {
             return user;
         });
     }
+    getUsernameById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_model_1.User.findOne({ _id: id }, { username: 1, _id: 0 });
+            return user.username;
+        });
+    }
     findByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_model_1.User.findOne({ email: email });

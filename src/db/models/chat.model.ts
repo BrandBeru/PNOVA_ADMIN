@@ -12,6 +12,7 @@ const ChatSchema: Schema<IChat> = new Schema<IChat>({
       required: true,
     },
   ],
+  channelId: {type: mongoose.Schema.Types.ObjectId, ref: 'channels', required: true},
   messages: [
     {
       _id: {
@@ -32,6 +33,7 @@ const ChatSchema: Schema<IChat> = new Schema<IChat>({
         type: String,
         required: true,
       },
+      iv: {type: String},
       meta: {
         createdDate: {
           type: mongoose.Schema.Types.Date,

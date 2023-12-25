@@ -18,27 +18,37 @@ const chat_schema_1 = require("../schemas/chat.schema");
 const chat_service_1 = __importDefault(require("../services/chat.service"));
 const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
-const path_1 = require("path");
+const socketio_jwt_1 = __importDefault(require("socketio-jwt"));
+const config_1 = __importDefault(require("../config/config"));
+const user_service_1 = __importDefault(require("../services/user.service"));
 const service = new chat_service_1.default();
+const userService = new user_service_1.default();
 const router = express_1.default.Router();
-function chatRouter(server) {
+function chatRouter(server, session) {
     const io = new socket_io_1.Server(server, {
-        connectionStateRecovery: {},
-        cors: {
-            origin: ['http://localhost:5500']
-        }
+        connectionStateRecovery: {}
     });
+    io.use(socketio_jwt_1.default.authorize({
+        secret: config_1.default.jwtSecret,
+        handshake: true
+    }));
     io.on('connection', (socket) => __awaiter(this, void 0, void 0, function* () {
-        const user = (yield fetch('https://randomuser.me/api/').then(data => data.json()));
-        const id = user.results[0].name.first;
-        socket.on('message', (msg) => __awaiter(this, void 0, void 0, function* () {
-            const token = socket.handshake.auth.token;
-            const chatId = socket.handshake.auth.chatId;
-            const user = socket.handshake.auth.user;
-            console.log(chatId, user);
-            io.emit("message", msg, id);
+        const chatId = socket.handshake.auth.chatId;
+        const user = socket.decoded_token.sub;
+        socket.on(`${chatId}`, (msg) => __awaiter(this, void 0, void 0, function* () {
+            const message = {
+                text: msg,
+                transmitter: user
+            };
+            const username = yield userService.getUsernameById(user);
+            saveMessage(chatId, user, message);
+            io.emit(`${chatId}`, msg, username);
         }));
     }));
+    const saveMessage = (chatId, user, msg) => __awaiter(this, void 0, void 0, function* () {
+        const saved = yield service.sendMessage(chatId, user, msg);
+        return saved;
+    });
     router.get("/", passport_1.default.authenticate("jwt", { session: true }), (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
             const user = req.user.sub;
@@ -52,8 +62,9 @@ function chatRouter(server) {
     router.get("/:id", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
-            const chat = service.findChatById(id);
-            res.sendFile((0, path_1.join)(__dirname, '../index.html'));
+            const chat = yield service.findChatById(id);
+            res.json(chat);
+            //res.sendFile(join(__dirname, '../index.html'))
         }
         catch (error) {
             next(error);

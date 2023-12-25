@@ -58,10 +58,14 @@ router.patch(
   passport.authenticate("jwt", { session: true }),
   validatorHandler(getUserSchema, "params"),
   async (req: any, res, next) => {
-    const username = req.user.sub;
-    const body = req.body;
-    const rta = service.updateOne(username, body);
-    res.status(200).json(rta);
+    try{
+      const username = req.user.sub;
+      const body = req.body;
+      const rta = service.updateOne(username, body);
+      res.status(200).json(rta);
+    }catch(error){
+      next(error)
+    }
   },
 );
 router.delete(

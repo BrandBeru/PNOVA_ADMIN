@@ -42,11 +42,11 @@ const options = {
     },
 };
 app.use((0, cors_1.default)(options));
-app.get("/", (req, res) => {
-    res.send('PNOVA\\VIGE STUDIOS');
+app.get("/", (req, res, next) => {
+    res.send('PNOVA\\VIGE STUDIOS - user: ');
 });
 require("./utils/auth");
-(0, routes_1.default)(app, server);
+(0, routes_1.default)(app, server, sessionMidddleware);
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use(error_handler_1.logError);

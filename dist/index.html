@@ -34,12 +34,16 @@
   </body>
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script>
-    const socket = io({
+    const cid = () => {
+      const url = window.location.href
+      const uri = url.split("/")
+      const id = uri[uri.length-1]
+      return id
+    }
+    const socket = io('',{
+      extraHeaders: {Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTdiNTY1OGNiYTc5MDUyNjhjOTdkOWIiLCJzY29wZSI6ImNsaWVudCIsImlhdCI6MTcwMjc3MDAzMn0.kmi9OrUBaeByVGMKtGX8_xhuGImv7Ur8NUxEnjxqOu4`},
       auth: {
-        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWFuMTAxNyIsInNjb3BlIjoidXNlciIsImlhdCI6MTcwMTA0OTg3OH0.BGYkvAiIoqskz_XKuJvL5sE8irBd4iDZZ1QzEwh6fJ0',
-        serverOffset: 0,
-        chatId: 0,
-        user: ''
+        chatId: cid()
       }
     });
     const form = document.getElementById('form');
@@ -51,25 +55,21 @@
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       if (input.value) {
-        socket.emit('message', input.value);
+        socket.emit(`${cid()}`, input.value);
         input.value = '';
       }
     });
     socket.on('connect', function() {
-      const url = window.location.href
-      const uri = url.split("/")
-      const id = uri[uri.length-1]
-      chatId.innerText = id
-      socket.auth.chatId = id
+      socket.on(`${cid()}`, (msg, username) => {
+        message(msg, username)
+      });
+      chatId.innerText = cid()
+      socket.auth.chatId = cid()
     })
-    socket.on('message', (msg, serverOffset) => {
-      socket.auth.serverOffset = serverOffset
-      message(msg, serverOffset)
-    });
 
-    const message = (msg, serverOffset) => {
+    const message = (msg, username) => {
       const item = document.createElement('li');
-      item.textContent = socket.auth.serverOffset+": "+msg;
+      item.textContent = username+": "+msg;
       messages.appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     }

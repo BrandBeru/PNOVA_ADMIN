@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const boom_1 = __importDefault(require("@hapi/boom"));
 const chat_model_1 = require("../db/models/chat.model");
 const user_service_1 = __importDefault(require("./user.service"));
+const encrypt_1 = require("../utils/encrypt");
 const user = new user_service_1.default();
 class ChatService {
     create(...members) {
@@ -32,24 +33,19 @@ class ChatService {
             }
         });
     }
-    getById(...ids) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const users = yield user.getUserById(...ids);
-                return users;
-            }
-            catch (error) {
-                throw boom_1.default.unauthorized();
-            }
-        });
-    }
     sendMessage(chatId, userId, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            const message = Object.assign(Object.assign({}, body), { transmitter: userId });
+            const password = yield (0, encrypt_1.encryption)(body.text.toString());
+            const message = Object.assign(Object.assign({}, body), { transmitter: userId, text: password.ciph, iv: password.iv });
             const data = yield chat_model_1.Chat.updateOne({ _id: chatId }, { $push: {
                     messages: message
                 } });
             return data;
+        });
+    }
+    getMessages(chatId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield chat_model_1.Chat.find;
         });
     }
     /**
@@ -82,11 +78,25 @@ class ChatService {
     }
     findChatById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const chat = yield chat_model_1.Chat.findOne({ _id: id }).populate({
-                path: 'members',
-                select: 'name _id username email name lastName meta'
-            });
-            return chat;
+            try {
+                const chat = yield chat_model_1.Chat.findOne({ _id: id }).populate({
+                    path: 'members',
+                    select: 'name _id username email name lastName meta'
+                });
+                const messages = new Array();
+                chat === null || chat === void 0 ? void 0 : chat.messages.forEach(({ text, iv }) => __awaiter(this, void 0, void 0, function* () {
+                    const decrypt = yield (0, encrypt_1.decryption)(text.toString(), iv);
+                    messages.push(decrypt);
+                }));
+                const object = {
+                    chat,
+                    messages: messages
+                };
+                return object;
+            }
+            catch (err) {
+                throw boom_1.default.badRequest();
+            }
         });
     }
     deleteChat(id) {

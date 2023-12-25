@@ -15,8 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const auth_service_1 = __importDefault(require("../services/auth.service"));
 const express_1 = __importDefault(require("express"));
+const user_service_1 = __importDefault(require("../services/user.service"));
 const router = express_1.default.Router();
 const service = new auth_service_1.default();
+const userService = new user_service_1.default();
 router.post("/login", passport_1.default.authenticate("local", { session: false }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.user;
@@ -28,7 +30,21 @@ router.post("/login", passport_1.default.authenticate("local", { session: false 
     }
 }));
 router.get("/google", passport_1.default.authenticate("google", { scope: ['email', 'profile'] }));
-router.get("/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/" }), (req, res, next) => {
-    res.redirect("/");
-});
+router.get("/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/api/v1/auth/google" }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userCb = req.user;
+        const user = yield userService.existUsersByEmail(userCb.email);
+        if (user.length) {
+            const token = yield service.signToken(user[0]);
+            res.json(token);
+        }
+        const rta = yield userService.create(userCb);
+        const token = yield service.signToken(rta);
+        res.json(token);
+        res.redirect("/");
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = router;

@@ -51,10 +51,15 @@ router.post("/", (0, validator_handler_1.default)(users_schema_1.createUserSchem
     }
 }));
 router.patch("/edit", passport_1.default.authenticate("jwt", { session: true }), (0, validator_handler_1.default)(users_schema_1.getUserSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.user.sub;
-    const body = req.body;
-    const rta = service.updateOne(username, body);
-    res.status(200).json(rta);
+    try {
+        const username = req.user.sub;
+        const body = req.body;
+        const rta = service.updateOne(username, body);
+        res.status(200).json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
 }));
 router.delete("/", (0, validator_handler_1.default)(users_schema_1.getUserSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.send("(DELETE) users/");
