@@ -1,10 +1,11 @@
 import { Router } from "express";
 import ChannelService from "../services/channel.service";
+import passport from "passport";
 
 const service = new ChannelService()
 const router = Router()
 
-router.get('/', (req, res, next) => {
+router.get('/', passport.authenticate("jwt", { session: true }), (req, res, next) => {
   try{
     const channels = service.find()
     res.json(channels)
@@ -12,7 +13,7 @@ router.get('/', (req, res, next) => {
     next(error)
   }
 })
-router.post('/', (req, res, next) => {
+router.post('/', passport.authenticate("jwt", { session: true }), (req, res, next) => {
   try{
     const body = req.body
     const channel = service.create(body)

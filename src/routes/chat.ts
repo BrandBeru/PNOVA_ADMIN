@@ -25,10 +25,10 @@ export default function chatRouter(server: any,session:any){
     secret: config.jwtSecret,
     handshake: true
   }))
-  io.on('connection', async (socket) => {
+  io.on('connection', async (socket:any) => {
     const chatId = socket.handshake.auth.chatId
     const user = socket.decoded_token.sub
-    socket.on(`${chatId}`, async (msg) => {
+    socket.on(`${chatId}`, async (msg:any) => {
       const message = <IMessage>{
         text: msg,
         transmitter: user

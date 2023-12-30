@@ -57,6 +57,9 @@ class UserService{
   async existUsersByEmail(...users:Array<String>){
     return await User.find({email: {$in: users}})
   }
+  async updateRole(userId: string, role: string){
+    await User.updateOne({_id: userId}, {$set:{role:role}})
+  }
 }
 
 export default UserService

@@ -1,22 +1,25 @@
 import { Order } from "../db/models/order.model"
+import UserService from "./user.service"
 
+const user = new UserService()
 class OrderService{
-  create(body: IOrder){
-    const order = Order.create(body)
+  async create(body: IOrder){
+    const order = await Order.create(body)
+    await user.updateRole(body.clientId.toString(), 'client')
     return order
   }
-  find(skip: number, limit: number){
-    const orders = Order.find({})
+  async find(skip: number, limit: number, clientId: string){
+    const orders = await Order.find({clientId: clientId})
     .skip(skip)
     .limit(limit)
     return orders
   }
-  findOne(id: string){
-    const orders = Order.findOne({_id: id})
+  async findOne(id: string){
+    const orders = await Order.findOne({_id: id})
     return orders
   }
-  updateById(id: string){
-    const rta = Order.updateOne({_id: id})
+  async updateById(id: string){
+    const rta = await Order.updateOne({_id: id})
     return rta
   }
 
