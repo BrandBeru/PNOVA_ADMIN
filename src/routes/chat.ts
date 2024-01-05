@@ -8,7 +8,7 @@ import {
 import ChatService from "../services/chat.service";
 import express, { NextFunction, Router } from "express";
 import { Server } from "socket.io";
-import { join } from "path";
+import type { Socket } from "socket.io";
 import socketioJwt from 'socketio-jwt'
 import config from "../config/config";
 import UserService from "../services/user.service";
@@ -21,23 +21,23 @@ export default function chatRouter(server: any,session:any){
   const io = new Server(server,{
     connectionStateRecovery: {}
   })
-  io.use(socketioJwt.authorize({
-    secret: config.jwtSecret,
-    handshake: true
-  }))
-  io.on('connection', async (socket:any) => {
-    const chatId = socket.handshake.auth.chatId
-    const user = socket.decoded_token.sub
-    socket.on(`${chatId}`, async (msg:any) => {
-      const message = <IMessage>{
-        text: msg,
-        transmitter: user
-      }
-      const username = await userService.getUsernameById(user)
-      saveMessage(chatId, user, message)
-      io.emit(`${chatId}`, msg, username)
-    })
-  })
+  // io.use(socketioJwt.authorize({
+  //   secret: config.jwtSecret,
+  //   handshake: true
+  // }))
+  // io.on('connection', async (socket) => {
+  //   const chatId = socket.handshake.auth.chatId
+  //   const user = socket.decoded_token.sub
+  //   socket.on(`${chatId}`, async (msg) => {
+  //     const message = <IMessage>{
+  //       text: msg,
+  //       transmitter: user
+  //     }
+  //     const username = await userService.getUsernameById(user)
+  //     saveMessage(chatId, user, message)
+  //     io.emit(`${chatId}`, msg, username)
+  //   })
+  // })
   const saveMessage = async (chatId: string, user:string, msg:IMessage) => {
     const saved = await service.sendMessage(chatId, user, msg)
     return saved

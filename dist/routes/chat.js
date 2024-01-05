@@ -18,8 +18,6 @@ const chat_schema_1 = require("../schemas/chat.schema");
 const chat_service_1 = __importDefault(require("../services/chat.service"));
 const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
-const socketio_jwt_1 = __importDefault(require("socketio-jwt"));
-const config_1 = __importDefault(require("../config/config"));
 const user_service_1 = __importDefault(require("../services/user.service"));
 const service = new chat_service_1.default();
 const userService = new user_service_1.default();
@@ -28,23 +26,23 @@ function chatRouter(server, session) {
     const io = new socket_io_1.Server(server, {
         connectionStateRecovery: {}
     });
-    io.use(socketio_jwt_1.default.authorize({
-        secret: config_1.default.jwtSecret,
-        handshake: true
-    }));
-    io.on('connection', (socket) => __awaiter(this, void 0, void 0, function* () {
-        const chatId = socket.handshake.auth.chatId;
-        const user = socket.decoded_token.sub;
-        socket.on(`${chatId}`, (msg) => __awaiter(this, void 0, void 0, function* () {
-            const message = {
-                text: msg,
-                transmitter: user
-            };
-            const username = yield userService.getUsernameById(user);
-            saveMessage(chatId, user, message);
-            io.emit(`${chatId}`, msg, username);
-        }));
-    }));
+    // io.use(socketioJwt.authorize({
+    //   secret: config.jwtSecret,
+    //   handshake: true
+    // }))
+    // io.on('connection', async (socket) => {
+    //   const chatId = socket.handshake.auth.chatId
+    //   const user = socket.decoded_token.sub
+    //   socket.on(`${chatId}`, async (msg) => {
+    //     const message = <IMessage>{
+    //       text: msg,
+    //       transmitter: user
+    //     }
+    //     const username = await userService.getUsernameById(user)
+    //     saveMessage(chatId, user, message)
+    //     io.emit(`${chatId}`, msg, username)
+    //   })
+    // })
     const saveMessage = (chatId, user, msg) => __awaiter(this, void 0, void 0, function* () {
         const saved = yield service.sendMessage(chatId, user, msg);
         return saved;
