@@ -1,5 +1,5 @@
 import { User } from "../db/models/user.model";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import boom from '@hapi/boom'
 
 class UserService{

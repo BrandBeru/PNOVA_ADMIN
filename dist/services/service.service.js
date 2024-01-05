@@ -20,7 +20,7 @@ class ServiceService {
     }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
-            const services = yield service_model_1.Service.find();
+            const services = yield service_model_1.Service.find({});
             return services;
         });
     }

@@ -12,9 +12,9 @@ router.get(
   "/",
   passport.authenticate("jwt"),
   checkRoles("admin"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      const services = service.find();
+      const services = await service.find();
       res.json(services);
     } catch (error) {
       next(error);
@@ -26,10 +26,10 @@ router.post(
   validatorHandler(createServiceSchema, "body"),
   passport.authenticate("jwt"),
   checkRoles("admin"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const body = req.body;
-      const rta = service.create(body);
+      const rta = await service.create(body);
       res.json(rta);
     } catch (error) {
       next(error);
@@ -39,20 +39,20 @@ router.post(
 router.get(
   "/:id",
   validatorHandler(findServiceSchema,"params"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const { id } = req.params;
-      const rta = service.findById(id);
+      const rta = await service.findById(id);
       res.json(rta);
     } catch (error) {
       next(error);
     }
   },
 );
-router.patch("/:id", (req, res, next) => {
+router.patch("/:id", async (req, res, next) => {
   try{
     const {id} = req.params
-    const rta = service.updateById(id)
+    const rta = await service.updateById(id)
     res.json(rta)
   }catch(error){
     next(error)

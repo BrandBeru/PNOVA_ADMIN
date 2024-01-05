@@ -1,7 +1,7 @@
 import { Group } from "../db/models/channel.model"
 
 class GroupService{
-  async create(body:IGroup, adminId: string){
+  async create(body:IChannel, adminId: string){
     const data = {
       ...body,
       admins: [adminId]

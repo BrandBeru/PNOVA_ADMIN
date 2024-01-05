@@ -2,10 +2,8 @@ import boom from "@hapi/boom"
 import { Chat } from "../db/models/chat.model"
 import UserService from "./user.service"
 import { decryption, encryption } from "../utils/encrypt"
-import { string } from "joi"
 
 const user = new UserService()
-
 
 class ChatService{
   async create(...members: Array<string>){

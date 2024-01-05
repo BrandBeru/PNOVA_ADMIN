@@ -6,7 +6,7 @@ class ServiceService {
     return services
   }
   async find(){
-    const services = await Service.find()
+    const services = await Service.find({})
     return services
   }
   async findById(id: string){

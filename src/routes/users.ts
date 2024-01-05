@@ -61,7 +61,7 @@ router.patch(
     try{
       const username = req.user.sub;
       const body = req.body;
-      const rta = service.updateOne(username, body);
+      const rta = await service.updateOne(username, body);
       res.status(200).json(rta);
     }catch(error){
       next(error)

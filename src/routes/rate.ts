@@ -13,21 +13,21 @@ router.post(
   validatorHandler(createRateSchema, "body"),
   passport.authenticate("jwt"),
   checkRoles("client"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const body = req.body;
-      const rta = service.create(body);
+      const rta = await service.create(body);
       res.json(rta);
     } catch (error) {
       next(error);
     }
   },
 );
-router.get("/", (req:any, res:any, next) => {
+router.get("/", async (req:any, res:any, next) => {
   try{
     const skip = req.params.skip
     const limit = req.params.limit
-    const rta = service.find(skip, limit);
+    const rta = await service.find(skip, limit);
     res.json(rta);
   }catch(error){
     next(error)
@@ -35,13 +35,13 @@ router.get("/", (req:any, res:any, next) => {
 });
 router.get("/:level",
 validatorHandler(findRateByUserSchema, "params"),
-(req:any, res:any, next) => {
+async (req:any, res:any, next) => {
   try{
     const skip = req.params.skip
     const limit = req.params.limit
     const ascend = req.params.asc
     const {level} = req.params
-    const rta = service.findByRate(level, ascend, skip, limit)
+    const rta = await service.findByRate(level, ascend, skip, limit)
     res.json(rta)
   }catch(error){
     next(error)
@@ -52,10 +52,10 @@ router.get(
   validatorHandler(findRateByUserSchema, "params"),
   passport.authenticate("jwt"),
   checkRoles("client"),
-  (req:any, res, next) => {
+  async (req:any, res, next) => {
     try{
       const id = req.user.sub
-      const rta = service.findByUserId(id)
+      const rta = await service.findByUserId(id)
       res.json(rta)
     }catch(error){
       next(error)
@@ -67,10 +67,10 @@ router.get(
   validatorHandler(findRateByUserSchema, "params"),
   passport.authenticate("jwt"),
   checkRoles("admin"),
-  (req:any, res, next) => {
+  async (req:any, res, next) => {
     try{
       const id = req.user.sub
-      const rta = service.findByUserId(id)
+      const rta = await  service.findByUserId(id)
       res.json(rta)
     }catch(error){
       next(error)
@@ -80,10 +80,14 @@ router.get(
 router.get(
   "/service/:id",
   validatorHandler(findRateByUserSchema, "params"),
-  (req, res, next) => {
-    const {id} = req.params
-    const rta = service.findByServiceId(id)
-    res.json(rta)
+  async (req, res, next) => {
+    try{
+      const {id} = req.params
+      const rta = await service.findByServiceId(id)
+      res.json(rta)
+    }catch(error){
+      next(error)
+    }
   }
 )
 

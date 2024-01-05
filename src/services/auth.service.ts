@@ -1,5 +1,5 @@
 import boom from "@hapi/boom"
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import UserService from "./user.service"
 import config from "../config/config"

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const boom_1 = __importDefault(require("@hapi/boom"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_service_1 = __importDefault(require("./user.service"));
 const config_1 = __importDefault(require("../config/config"));
@@ -25,7 +25,7 @@ class AuthService {
             if (!user) {
                 throw boom_1.default.notFound();
             }
-            const compare = yield bcrypt_1.default.compare(password, user.password);
+            const compare = yield bcryptjs_1.default.compare(password, user.password);
             if (!compare) {
                 throw boom_1.default.unauthorized();
             }

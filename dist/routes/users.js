@@ -54,7 +54,7 @@ router.patch("/edit", passport_1.default.authenticate("jwt", { session: true }),
     try {
         const username = req.user.sub;
         const body = req.body;
-        const rta = service.updateOne(username, body);
+        const rta = yield service.updateOne(username, body);
         res.status(200).json(rta);
     }
     catch (error) {

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../db/models/user.model");
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const boom_1 = __importDefault(require("@hapi/boom"));
 class UserService {
     findByName(name) {
@@ -58,7 +58,7 @@ class UserService {
     }
     create(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const hash = yield bcrypt_1.default.hash(user.password.toString(), 10);
+            const hash = yield bcryptjs_1.default.hash(user.password.toString(), 10);
             const rta = yield user_model_1.User.create(Object.assign(Object.assign({}, user), { password: hash }));
             return rta;
         });
@@ -80,6 +80,11 @@ class UserService {
     existUsersByEmail(...users) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield user_model_1.User.find({ email: { $in: users } });
+        });
+    }
+    updateRole(userId, role) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield user_model_1.User.updateOne({ _id: userId }, { $set: { role: role } });
         });
     }
 }
