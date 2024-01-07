@@ -7,8 +7,9 @@ const ServiceSchema = new Schema<IService>({
   faviconUrl: {type: String},
   description: {type: String},
   price: {type: Number, required: true},
-  deliverTime: {type: Number},
+  deliverTime: {type: Number, required: true},
   imagesUrl: [{type: String}],
+  characteristics: [{type: {}, required: true}],
   meta: {
     createdDate: {type: String, default: new Date()},
     modifiedDate: {type: String, default: new Date()},

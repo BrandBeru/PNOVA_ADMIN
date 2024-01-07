@@ -11,8 +11,7 @@ const router = Router();
 router.get(
   "/",
   passport.authenticate("jwt"),
-  checkRoles("admin"),
-  async (req, res, next) => {
+   async (req, res, next) => {
     try {
       const services = await service.find();
       res.json(services);

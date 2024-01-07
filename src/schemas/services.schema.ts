@@ -7,6 +7,7 @@ const description = Joi.string().max(200)
 const price = Joi.number()
 const deliverTime = Joi.number()
 const imagesUrl = Joi.array()
+const characteristics = Joi.array()
 
 const createServiceSchema = Joi.object({
   name: name.required(),
@@ -14,7 +15,8 @@ const createServiceSchema = Joi.object({
   description: description,
   price: price.required(),
   deliverTime: deliverTime.required(),
-  imagesUrl: imagesUrl
+  imagesUrl: imagesUrl,
+  characteristics: characteristics.required()
 })
 const findServiceSchema = Joi.object({
   _id: id.required()

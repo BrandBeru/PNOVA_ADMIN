@@ -5,19 +5,26 @@ const USER_DOCUMENT = 'users'
 const UserSchema: Schema = new Schema<IUser>({
   username: {
     type: String,
-    unique: true
+    unique: true,
+    required: true
   },
   name: {
-    type: String
+    type: String,
+    required: true
   },
   lastName: {
     type: String,
+    required: true
   },
   email: {
     type: String,
-    unique: true
+    unique: true,
+    required: true
   },
-  password: String,
+  password: {
+    type: String,
+    required: true
+  },
   role: {
     type: String,
     required: true,

@@ -20,7 +20,7 @@ const passport_1 = __importDefault(require("passport"));
 const auth_handler_1 = require("../middlewares/auth.handler");
 const router = (0, express_1.Router)();
 const service = new order_service_1.default();
-router.get("/", (0, auth_handler_1.checkRoles)("client", 'admin'), passport_1.default.authenticate("jwt"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client", 'admin'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const skip = req.params.skip;
         const limit = req.params.limit;
@@ -32,7 +32,7 @@ router.get("/", (0, auth_handler_1.checkRoles)("client", 'admin'), passport_1.de
         next(error);
     }
 }));
-router.get("/:id", (0, auth_handler_1.checkRoles)("client", "admin"), passport_1.default.authenticate("jwt"), (0, validator_handler_1.default)(order_schema_1.findOrderSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client", "admin"), (0, validator_handler_1.default)(order_schema_1.findOrderSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const rta = yield service.findOne(id);
@@ -42,7 +42,7 @@ router.get("/:id", (0, auth_handler_1.checkRoles)("client", "admin"), passport_1
         next(error);
     }
 }));
-router.post("/", (0, auth_handler_1.checkRoles)("user"), passport_1.default.authenticate("jwt"), (0, validator_handler_1.default)(order_schema_1.createOrderSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("user"), (0, validator_handler_1.default)(order_schema_1.createOrderSchema, "body"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
         const clientId = req.user.sub;
@@ -54,7 +54,7 @@ router.post("/", (0, auth_handler_1.checkRoles)("user"), passport_1.default.auth
         next(error);
     }
 }));
-router.patch("/:id", (0, auth_handler_1.checkRoles)("admin", "client"), passport_1.default.authenticate("jwt"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/:id", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("admin", "client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const rta = yield service.updateById(id);
