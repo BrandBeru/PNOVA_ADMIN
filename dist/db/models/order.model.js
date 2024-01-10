@@ -31,14 +31,15 @@ const OrderSchema = new mongoose_1.Schema({
     clientId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: "users" },
     serviceId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: "services" },
     deliverDate: { type: String, default: new Date() },
-    aditionalInformation: { type: String },
+    additionalInformation: { type: String },
     reviews: { type: mongoose_1.default.Schema.Types.Number, required: true },
     priority: { type: mongoose_1.default.Schema.Types.Boolean },
     meta: {
         createdDate: { type: mongoose_1.default.Schema.Types.Date, default: new Date() },
         modifiedDate: { type: mongoose_1.default.Schema.Types.Date, default: new Date() },
         payment: { type: mongoose_1.default.Schema.Types.Boolean, default: false },
-        delivered: { type: mongoose_1.default.Schema.Types.Boolean, default: false }
+        delivered: { type: mongoose_1.default.Schema.Types.Boolean, default: false },
+        active: { type: mongoose_1.default.Schema.Types.Boolean, default: false }
     }
 });
 exports.OrderSchema = OrderSchema;

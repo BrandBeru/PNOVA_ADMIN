@@ -12,13 +12,15 @@ const description = joi_1.default.string().max(200);
 const price = joi_1.default.number();
 const deliverTime = joi_1.default.number();
 const imagesUrl = joi_1.default.array();
+const characteristics = joi_1.default.array();
 const createServiceSchema = joi_1.default.object({
     name: name.required(),
     faviconUrl: faviconUrl.required(),
     description: description,
     price: price.required(),
     deliverTime: deliverTime.required(),
-    imagesUrl: imagesUrl
+    imagesUrl: imagesUrl,
+    characteristics: characteristics.required()
 });
 exports.createServiceSchema = createServiceSchema;
 const findServiceSchema = joi_1.default.object({

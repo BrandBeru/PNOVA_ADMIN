@@ -33,7 +33,7 @@ router.get(
   async (req, res, next) => {
     try {
       const { username } = req.params;
-      const rta = await service.findbyUsername(username);
+      const rta = await service.findByUsername(username);
       res.json(rta);
     } catch (error) {
       next(error);

@@ -18,7 +18,7 @@ exports.checkApiKey = checkApiKey;
 function checkRoles(...roles) {
     return (req, res, next) => {
         const user = req.user;
-        if (roles.includes(user.sub)) {
+        if (roles.includes(user.scope)) {
             next();
         }
         else {

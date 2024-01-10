@@ -30,6 +30,10 @@ const UserSchema: Schema = new Schema<IUser>({
     required: true,
     default: 'client'
   },
+  recoveryToken: {
+    type: String,
+    default: '',
+  },
   meta: {
     createdDate: {
       type: Date,

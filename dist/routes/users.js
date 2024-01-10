@@ -33,7 +33,7 @@ router.get("/name/:name", (0, validator_handler_1.default)(users_schema_1.findUs
 router.get("/:username", passport_1.default.authenticate("jwt", { session: true }), (0, auth_handler_1.checkRoles)("user", "admin"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username } = req.params;
-        const rta = yield service.findbyUsername(username);
+        const rta = yield service.findByUsername(username);
         res.json(rta);
     }
     catch (error) {

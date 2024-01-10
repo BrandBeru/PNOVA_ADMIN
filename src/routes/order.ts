@@ -1,7 +1,7 @@
 import { Router } from "express";
 import OrderService from "../services/order.service";
 import validatorHandler from "../middlewares/validator.handler";
-import { createOrderSchema, findOrderSchema } from "../schemas/order.schema";
+import { createOrderSchema, findOrderSchema, updateOrderSchema } from "../schemas/order.schema";
 import passport from "passport";
 import { checkRoles } from "../middlewares/auth.handler";
 
@@ -28,7 +28,7 @@ router.get("/:id", passport.authenticate("jwt"), checkRoles("client","admin"), v
     next(error)
   }
 })
-router.post("/", passport.authenticate("jwt"), checkRoles("user"), validatorHandler(createOrderSchema, "body"), async (req:any, res, next) => {
+router.post("/", validatorHandler(createOrderSchema, "body"), passport.authenticate("jwt"), checkRoles("user"), async (req:any, res, next) => {
   try{
     const body = req.body
     const clientId = req.user.sub
@@ -42,10 +42,11 @@ router.post("/", passport.authenticate("jwt"), checkRoles("user"), validatorHand
     next(error)
   }
 })
-router.patch("/:id",passport.authenticate("jwt"), checkRoles("admin", "client"), async (req, res, next) => {
+router.patch("/:id", validatorHandler(updateOrderSchema, "body"),passport.authenticate("jwt"), checkRoles("admin", "client"), async (req, res, next) => {
   try{
     const {id} = req.params
-    const rta = await service.updateById(id)
+    const body = req.body
+    const rta = await service.updateById(id, body)
     res.json(rta)
   }catch(error){
     next(error)

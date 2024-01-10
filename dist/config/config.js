@@ -20,5 +20,9 @@ const config = {
     encode_password: process.env.ENCODE_PASSWORD || '',
     encode_initial: process.env.ENCODE_INITIAL || '',
     encode_algorithm: process.env.ENCODE_ALGORITHM || '',
+    frontend_url: process.env.FRONTEND_URL || '',
+    email_host: process.env.EMAIL_HOST || '',
+    email_user: process.env.EMAIL_USER || '',
+    email_password: process.env.EMAIL_PASSWORD || ''
 };
 exports.default = config;

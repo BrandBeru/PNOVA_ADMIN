@@ -18,7 +18,11 @@ const user = new user_service_1.default();
 class OrderService {
     create(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            const order = yield order_model_1.Order.create(body);
+            var order = (yield order_model_1.Order.create(body)).populate({
+                path: 'clientId',
+                select: '_id name lastName username email meta'
+            });
+            order = (yield order).populate('serviceId');
             yield user.updateRole(body.clientId.toString(), 'client');
             return order;
         });
@@ -33,13 +37,19 @@ class OrderService {
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const orders = yield order_model_1.Order.findOne({ _id: id });
+            const orders = yield order_model_1.Order.findOne({ _id: id }).populate('serviceId').populate({
+                path: 'clientId',
+                select: '_id name lastName username email meta'
+            });
             return orders;
         });
     }
-    updateById(id) {
+    updateById(id, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield order_model_1.Order.updateOne({ _id: id });
+            var rta = yield order_model_1.Order.updateOne({ _id: id }, body).populate({
+                path: 'clientId',
+                select: '_id name lastName username email meta'
+            }).populate('serviceId');
             return rta;
         });
     }

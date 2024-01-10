@@ -4,7 +4,11 @@ import UserService from "./user.service"
 const user = new UserService()
 class OrderService{
   async create(body: IOrder){
-    const order = await Order.create(body)
+    var order = (await Order.create(body)).populate({
+      path: 'clientId',
+      select: '_id name lastName username email meta'
+    })
+    order = (await order).populate('serviceId')
     await user.updateRole(body.clientId.toString(), 'client')
     return order
   }
@@ -15,11 +19,17 @@ class OrderService{
     return orders
   }
   async findOne(id: string){
-    const orders = await Order.findOne({_id: id})
+    const orders = await Order.findOne({_id: id}).populate('serviceId').populate({
+      path: 'clientId',
+      select: '_id name lastName username email meta'
+    })
     return orders
   }
-  async updateById(id: string){
-    const rta = await Order.updateOne({_id: id})
+  async updateById(id: string, body: object){
+    var rta = await Order.updateOne({_id: id}, body).populate({
+      path: 'clientId',
+      select: '_id name lastName username email meta'
+    }).populate('serviceId')
     return rta
   }
 

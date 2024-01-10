@@ -14,7 +14,7 @@ function checkApiKey(req:Request, res:Response, next:NextFunction){
 function checkRoles(...roles:Array<string>){
   return (req:any,res:any, next:NextFunction) => {
     const user = req.user
-    if(roles.includes(user.sub)){
+    if(roles.includes(user.scope)){
       next()
     }else{
       throw boom.unauthorized()

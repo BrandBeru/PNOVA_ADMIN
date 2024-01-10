@@ -16,6 +16,9 @@ const passport_1 = __importDefault(require("passport"));
 const auth_service_1 = __importDefault(require("../services/auth.service"));
 const express_1 = __importDefault(require("express"));
 const user_service_1 = __importDefault(require("../services/user.service"));
+const auth_handler_1 = require("../middlewares/auth.handler");
+const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
+const auth_schema_1 = require("../schemas/auth.schema");
 const router = express_1.default.Router();
 const service = new auth_service_1.default();
 const userService = new user_service_1.default();
@@ -42,6 +45,39 @@ router.get("/google/callback", passport_1.default.authenticate("google", { failu
         const token = yield service.signToken(rta);
         res.json(token);
         res.redirect("/");
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.post('/recovery', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.user.sub;
+        const rta = yield service.sendRecoveryPassword(id);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.patch('/change-password', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { token, newPassword } = req.body;
+        const rta = yield service.changePassword(token, newPassword);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.post('/send-email', (0, validator_handler_1.default)(auth_schema_1.sendEmailSchema, 'body'), passport_1.default.authenticate('jwt', { session: true }), (0, auth_handler_1.checkRoles)('admin'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const object = {
+            subject: req.body.subject,
+            html: req.body.html
+        };
+        const rta = yield service.sendEmailToClients(object.subject, object.html);
+        res.json(rta);
     }
     catch (error) {
         next(error);

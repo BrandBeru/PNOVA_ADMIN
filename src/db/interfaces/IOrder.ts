@@ -2,7 +2,7 @@ interface IOrder{
   clientId: String,
   serviceId: String,
   deliverDate: String,
-  aditionalInformation: String,
+  additionalInformation: String,
   reviews: Number,
   priority: Boolean,
   meta: {
