@@ -32,7 +32,7 @@ const OrderSchema = new mongoose_1.Schema({
     serviceId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: "services" },
     deliverDate: { type: String, default: new Date() },
     additionalInformation: { type: String },
-    reviews: { type: mongoose_1.default.Schema.Types.Number, required: true },
+    reviews: { type: mongoose_1.default.Schema.Types.Number, default: 3 },
     priority: { type: mongoose_1.default.Schema.Types.Boolean },
     meta: {
         createdDate: { type: mongoose_1.default.Schema.Types.Date, default: new Date() },

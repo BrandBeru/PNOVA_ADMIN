@@ -1,7 +1,7 @@
 import { Router } from "express";
 import OrderService from "../services/order.service";
 import validatorHandler from "../middlewares/validator.handler";
-import { createOrderSchema, findOrderSchema, updateOrderSchema } from "../schemas/order.schema";
+import { createOrderSchema, findOrderSchema } from "../schemas/order.schema";
 import passport from "passport";
 import { checkRoles } from "../middlewares/auth.handler";
 
@@ -42,7 +42,7 @@ router.post("/", validatorHandler(createOrderSchema, "body"), passport.authentic
     next(error)
   }
 })
-router.patch("/:id", validatorHandler(updateOrderSchema, "body"),passport.authenticate("jwt"), checkRoles("admin", "client"), async (req, res, next) => {
+router.patch("/:id",passport.authenticate("jwt"), checkRoles("admin", "client"), async (req, res, next) => {
   try{
     const {id} = req.params
     const body = req.body

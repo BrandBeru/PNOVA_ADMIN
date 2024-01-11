@@ -8,17 +8,11 @@ const priority = Joi.boolean()
 
 const createOrderSchema = Joi.object({
   serviceId: serviceId.required(),
-  additionalInformation: additionalInformation,
-  reviews: reviews,
-  priority: priority
-})
-const updateOrderSchema = Joi.object({
   additionalInformation: additionalInformation.required(),
-  reviews: reviews.required(),
-  priority: priority.required()
+  priority: priority
 })
 const findOrderSchema = Joi.object({
   id: id.required()
 })
 
-export {createOrderSchema, findOrderSchema, updateOrderSchema}
+export {createOrderSchema, findOrderSchema}

@@ -54,7 +54,7 @@ router.post("/", (0, validator_handler_1.default)(order_schema_1.createOrderSche
         next(error);
     }
 }));
-router.patch("/:id", (0, validator_handler_1.default)(order_schema_1.updateOrderSchema, "body"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("admin", "client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/:id", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("admin", "client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const body = req.body;

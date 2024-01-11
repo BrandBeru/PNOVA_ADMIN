@@ -7,7 +7,7 @@ const OrderSchema = new Schema<IOrder>({
   serviceId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "services" },
   deliverDate: { type: String, default: new Date() },
   additionalInformation: { type: String },
-  reviews: {type: mongoose.Schema.Types.Number, required: true},
+  reviews: {type: mongoose.Schema.Types.Number, default: 3},
   priority: {type: mongoose.Schema.Types.Boolean},
   meta:{
     createdDate: {type: mongoose.Schema.Types.Date, default: new Date()},
