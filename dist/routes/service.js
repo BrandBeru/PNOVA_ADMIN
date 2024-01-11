@@ -20,7 +20,7 @@ const validator_handler_1 = __importDefault(require("../middlewares/validator.ha
 const services_schema_1 = require("../schemas/services.schema");
 const service = new service_service_1.default();
 const router = (0, express_1.Router)();
-router.get("/", passport_1.default.authenticate("jwt"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const services = yield service.find();
         res.json(services);

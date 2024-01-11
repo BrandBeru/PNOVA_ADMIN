@@ -22,8 +22,9 @@ const service = new rate_service_1.default();
 const router = (0, express_1.Router)();
 router.post("/", (0, validator_handler_1.default)(rate_schema_1.createRateSchema, "body"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const userId = req.user.id;
         const body = req.body;
-        const rta = yield service.create(body);
+        const rta = yield service.create(Object.assign(Object.assign({}, body), { userId }));
         res.json(rta);
     }
     catch (error) {
@@ -41,7 +42,7 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         next(error);
     }
 }));
-router.get("/:level", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/level/:level", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const skip = req.params.skip;
         const limit = req.params.limit;
@@ -54,7 +55,7 @@ router.get("/:level", (0, validator_handler_1.default)(rate_schema_1.findRateByU
         next(error);
     }
 }));
-router.get("/user", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/me", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.user.sub;
         const rta = yield service.findByUserId(id);
@@ -66,7 +67,7 @@ router.get("/user", (0, validator_handler_1.default)(rate_schema_1.findRateByUse
 }));
 router.get("/user/:id", (0, validator_handler_1.default)(rate_schema_1.findRateByUserSchema, "params"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("admin"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.user.sub;
+        const { id } = req.params;
         const rta = yield service.findByUserId(id);
         res.json(rta);
     }

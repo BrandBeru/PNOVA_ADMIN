@@ -10,7 +10,6 @@ const router = Router();
 
 router.get(
   "/",
-  passport.authenticate("jwt"),
    async (req, res, next) => {
     try {
       const services = await service.find();

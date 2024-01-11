@@ -1,5 +1,18 @@
 require('dotenv').config()
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager"
 
+const secretId = 'projects/573935121603/secrets/PnovaSecrets/versions/latest'
+
+export async function grantAccess(parent:any){
+  const client = new SecretManagerServiceClient()
+  const request = {
+    parent,
+  }
+  const iterable = await client.listSecretsAsync(request)
+  for await(const response of iterable){
+    console.log(response)
+  }
+}
 const config = {
   env: process.env.NODE_ENV||'',
   port: process.env.PORT||'',

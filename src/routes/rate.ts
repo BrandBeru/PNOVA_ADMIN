@@ -13,10 +13,14 @@ router.post(
   validatorHandler(createRateSchema, "body"),
   passport.authenticate("jwt"),
   checkRoles("client"),
-  async (req, res, next) => {
+  async (req:any, res, next) => {
     try {
+      const userId = req.user.id
       const body = req.body;
-      const rta = await service.create(body);
+      const rta = await service.create({
+        ...body,
+        userId,
+      });
       res.json(rta);
     } catch (error) {
       next(error);
@@ -33,7 +37,7 @@ router.get("/", async (req:any, res:any, next) => {
     next(error)
   }
 });
-router.get("/:level",
+router.get("/level/:level",
 validatorHandler(findRateByUserSchema, "params"),
 async (req:any, res:any, next) => {
   try{
@@ -48,8 +52,7 @@ async (req:any, res:any, next) => {
   }
 })
 router.get(
-  "/user",
-  validatorHandler(findRateByUserSchema, "params"),
+  "/me",
   passport.authenticate("jwt"),
   checkRoles("client"),
   async (req:any, res, next) => {
@@ -67,9 +70,9 @@ router.get(
   validatorHandler(findRateByUserSchema, "params"),
   passport.authenticate("jwt"),
   checkRoles("admin"),
-  async (req:any, res, next) => {
+  async (req, res, next) => {
     try{
-      const id = req.user.sub
+      const {id} = req.params
       const rta = await  service.findByUserId(id)
       res.json(rta)
     }catch(error){

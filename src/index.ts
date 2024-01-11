@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import routerApi from "./routes";
 import mongoConnection from "./libs/mongoose";
-import config from "./config/config";
+import config, { grantAccess } from "./config/config";
 
 import {
   boomErrorHandler,
