@@ -19,7 +19,6 @@ var db = null;
 exports.db = db;
 function mongoConnection() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("URI:", config_1.development.uri);
         yield mongoose.connect(config_1.development.uri);
     });
 }

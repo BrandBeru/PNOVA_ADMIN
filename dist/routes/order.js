@@ -42,7 +42,7 @@ router.get("/:id", passport_1.default.authenticate("jwt"), (0, auth_handler_1.ch
         next(error);
     }
 }));
-router.post("/", (0, validator_handler_1.default)(order_schema_1.createOrderSchema, "body"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("user"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", (0, validator_handler_1.default)(order_schema_1.createOrderSchema, "body"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("user", "client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
         const clientId = req.user.sub;

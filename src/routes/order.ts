@@ -28,7 +28,7 @@ router.get("/:id", passport.authenticate("jwt"), checkRoles("client","admin"), v
     next(error)
   }
 })
-router.post("/", validatorHandler(createOrderSchema, "body"), passport.authenticate("jwt"), checkRoles("user"), async (req:any, res, next) => {
+router.post("/", validatorHandler(createOrderSchema, "body"), passport.authenticate("jwt"), checkRoles("user", "client"), async (req:any, res, next) => {
   try{
     const body = req.body
     const clientId = req.user.sub

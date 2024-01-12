@@ -22,7 +22,7 @@ const service = new rate_service_1.default();
 const router = (0, express_1.Router)();
 router.post("/", (0, validator_handler_1.default)(rate_schema_1.createRateSchema, "body"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.user.id;
+        const userId = req.user.sub;
         const body = req.body;
         const rta = yield service.create(Object.assign(Object.assign({}, body), { userId }));
         res.json(rta);

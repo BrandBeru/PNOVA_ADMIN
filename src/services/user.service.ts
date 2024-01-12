@@ -5,7 +5,7 @@ import boom from '@hapi/boom'
 class UserService{
   async findByName(name:string){
     const users = await User.find({
-      $and: [{name: {$regex: name, $options: "i"}}, {meta: {isActive: true}}]
+      $and: [{name: {$regex: name, $options: "i"}}, {"meta.isActive": true}]
     }).select({name:1, lastName:1, email:1})
     if(!users.length){
       throw boom.notFound()
@@ -13,7 +13,7 @@ class UserService{
     return users
   }
   async findByUsername(username: string){
-    const user = await User.findOne({$and: [{username: username}, {meta: {isActive: true}}]}).select({
+    const user = await User.findOne({$and: [{username: username}, {"meta.isActive":true}]}).select({
       name:1, lastName:1, email:1, username:1, _id:0
     })
     if(!user){
@@ -26,7 +26,7 @@ class UserService{
     return user.username
   }
   async findByEmail(email: string){
-    const user = await User.findOne({$and: [{email: email}, {meta: {isActive: true}}]})
+    const user = await User.findOne({$and: [{email: email}, {"meta.isActive":true}]})
     return user
   }
   async findOne(id: string){
@@ -71,7 +71,7 @@ class UserService{
     return await User.find({_id: {$in: users}})
   }
   async existUsersByEmail(...users:Array<String>){
-    return await User.find({email: {$in: users}})
+    return await User.exists({email: {$in: users}})
   }
   async updateRole(userId: string, role: string){
     await User.updateOne({_id: userId}, {$set:{role:role}})

@@ -10,7 +10,6 @@ export async function grantAccess(parent:any){
   }
   const iterable = await client.listSecretsAsync(request)
   for await(const response of iterable){
-    console.log(response)
   }
 }
 const config = {
@@ -27,6 +26,12 @@ const config = {
   clientId: process.env.CLIENT_ID||'',
   clientSecret: process.env.CLIENT_SECRET||'',
   callbackUrl: process.env.CALLBACK_URL||'',
+  mClientId: process.env.M_CLIENT_ID||'',
+  mClientSecret: process.env.M_CLIENT_SECRET||'',
+  mCallbackUrl: process.env.M_CALLBACK_URL||'',
+  tConsumerSecret: process.env.T_CONSUMER_SECRET||'',
+  tCallbackUrl: process.env.T_CALLBACK_URL||'',
+  tConsumerKey: process.env.T_CONSUMER_KEY||'',
   project: process.env.PROJECT||'',
   version: process.env.VERSION||'',
   encode_password: process.env.ENCODE_PASSWORD||'',

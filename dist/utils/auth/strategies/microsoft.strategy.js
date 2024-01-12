@@ -12,25 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const passport_google_oauth20_1 = __importDefault(require("passport-google-oauth20"));
-const config_1 = __importDefault(require("../../../config/config"));
 const boom_1 = __importDefault(require("@hapi/boom"));
-const GoogleStrategy = passport_google_oauth20_1.default.Strategy;
+const passport_microsoft_1 = __importDefault(require("passport-microsoft"));
+const config_1 = __importDefault(require("../../../config/config"));
+const MicrosoftStrategy = passport_microsoft_1.default.Strategy;
 const options = {
-    clientID: config_1.default.clientId,
-    clientSecret: config_1.default.clientSecret,
-    callbackURL: config_1.default.callbackUrl,
+    clientID: config_1.default.mClientId,
+    clientSecret: config_1.default.mClientSecret,
+    callbackURL: config_1.default.mCallbackUrl,
+    scope: ['user.read'],
+    tenant: 'common',
 };
-const verifyHandler = (accessToken, refreshToken, profile, cb, done) => __awaiter(void 0, void 0, void 0, function* () {
+const verifyHandler = (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const password = yield fetch('https://passwordinator.onrender.com?num=true&char=true&caps=true&len=32').then(data => data.json());
         const data = {
-            name: cb.name.givenName,
-            lastName: cb.name.familyName,
-            username: `user${cb.id}`,
-            email: cb.emails[0].value,
+            name: profile.name.givenName,
+            lastName: profile.name.familyName,
+            username: `user${profile.id}`,
+            email: profile.emails[0].value,
             password: password,
-            provider: cb.provider
+            provider: profile.provider
         };
         return done(null, data);
     }
@@ -38,5 +40,5 @@ const verifyHandler = (accessToken, refreshToken, profile, cb, done) => __awaite
         throw boom_1.default.conflict(error);
     }
 });
-const GoogleOAuth = new GoogleStrategy(options, verifyHandler);
-exports.default = GoogleOAuth;
+const MicrosoftOAuth = new MicrosoftStrategy(options, verifyHandler);
+exports.default = MicrosoftOAuth;

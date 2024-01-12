@@ -12,31 +12,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const passport_google_oauth20_1 = __importDefault(require("passport-google-oauth20"));
 const config_1 = __importDefault(require("../../../config/config"));
 const boom_1 = __importDefault(require("@hapi/boom"));
-const GoogleStrategy = passport_google_oauth20_1.default.Strategy;
+const passport_twitter_1 = __importDefault(require("passport-twitter"));
+const TwitterStrategy = passport_twitter_1.default.Strategy;
 const options = {
-    clientID: config_1.default.clientId,
-    clientSecret: config_1.default.clientSecret,
-    callbackURL: config_1.default.callbackUrl,
+    consumerKey: config_1.default.tConsumerKey,
+    consumerSecret: config_1.default.tConsumerSecret,
+    callbackURL: config_1.default.tCallbackUrl
 };
-const verifyHandler = (accessToken, refreshToken, profile, cb, done) => __awaiter(void 0, void 0, void 0, function* () {
+const verifyHandler = (accessToken, refreshToken, profile, cb) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const password = yield fetch('https://passwordinator.onrender.com?num=true&char=true&caps=true&len=32').then(data => data.json());
+        ''.toLowerCase;
         const data = {
-            name: cb.name.givenName,
-            lastName: cb.name.familyName,
-            username: `user${cb.id}`,
-            email: cb.emails[0].value,
+            name: profile.displayName.split(" ")[0],
+            lastName: profile.displayName.split(" ")[1],
+            username: profile.username.toLowerCase(),
+            email: profile.id,
             password: password,
-            provider: cb.provider
+            provider: profile.provider
         };
-        return done(null, data);
+        return cb(null, data);
     }
     catch (error) {
         throw boom_1.default.conflict(error);
     }
 });
-const GoogleOAuth = new GoogleStrategy(options, verifyHandler);
-exports.default = GoogleOAuth;
+const TwitterOAuth = new TwitterStrategy(options, verifyHandler);
+exports.default = TwitterOAuth;

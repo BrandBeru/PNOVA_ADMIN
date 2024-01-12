@@ -53,11 +53,15 @@ const UserSchema = new mongoose_1.Schema({
     role: {
         type: String,
         required: true,
-        default: 'client'
+        default: 'user'
     },
     recoveryToken: {
         type: String,
         default: '',
+    },
+    provider: {
+        type: String,
+        default: 'pnova'
     },
     meta: {
         createdDate: {

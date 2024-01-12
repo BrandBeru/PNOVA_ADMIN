@@ -8,12 +8,15 @@ const GroupSchema = new Schema<IChannel>({
   admins: {
     type: [{
       type: mongoose.Schema.Types.ObjectId,
-      unique: true
+      unique: true,
+      ref: 'users'
     }],
     required: true
   },
   meta: {
-
+    createdDate: {type: Date, default: new Date()},
+    modifiedDate: {type: Date, default: new Date()},
+    isActive: {type: Boolean, default: true}
   }
 });
 

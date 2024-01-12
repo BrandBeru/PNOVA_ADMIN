@@ -19,7 +19,7 @@ class UserService {
     findByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
             const users = yield user_model_1.User.find({
-                $and: [{ name: { $regex: name, $options: "i" } }, { meta: { isActive: true } }]
+                $and: [{ name: { $regex: name, $options: "i" } }, { "meta.isActive": true }]
             }).select({ name: 1, lastName: 1, email: 1 });
             if (!users.length) {
                 throw boom_1.default.notFound();
@@ -29,7 +29,7 @@ class UserService {
     }
     findByUsername(username) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.User.findOne({ $and: [{ username: username }, { meta: { isActive: true } }] }).select({
+            const user = yield user_model_1.User.findOne({ $and: [{ username: username }, { "meta.isActive": true }] }).select({
                 name: 1, lastName: 1, email: 1, username: 1, _id: 0
             });
             if (!user) {
@@ -46,7 +46,7 @@ class UserService {
     }
     findByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.User.findOne({ $and: [{ email: email }, { meta: { isActive: true } }] });
+            const user = yield user_model_1.User.findOne({ $and: [{ email: email }, { "meta.isActive": true }] });
             return user;
         });
     }
@@ -98,7 +98,7 @@ class UserService {
     }
     existUsersByEmail(...users) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield user_model_1.User.find({ email: { $in: users } });
+            return yield user_model_1.User.exists({ email: { $in: users } });
         });
     }
     updateRole(userId, role) {

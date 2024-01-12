@@ -9,7 +9,6 @@ const mongoose:Mongoose = require('mongoose');
 var db = null;
 
 export default async function mongoConnection(){
-  console.log("URI:", development.uri)
   await mongoose.connect(development.uri)
 }
 

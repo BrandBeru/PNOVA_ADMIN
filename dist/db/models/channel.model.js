@@ -33,11 +33,16 @@ const GroupSchema = new mongoose_1.Schema({
     admins: {
         type: [{
                 type: mongoose_1.default.Schema.Types.ObjectId,
-                unique: true
+                unique: true,
+                ref: 'users'
             }],
         required: true
     },
-    meta: {}
+    meta: {
+        createdDate: { type: Date, default: new Date() },
+        modifiedDate: { type: Date, default: new Date() },
+        isActive: { type: Boolean, default: true }
+    }
 });
 exports.GroupSchema = GroupSchema;
 const Group = mongoose_1.default.model(GROUP_DOCUMENT, GroupSchema);

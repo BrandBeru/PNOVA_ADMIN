@@ -28,11 +28,15 @@ const UserSchema: Schema = new Schema<IUser>({
   role: {
     type: String,
     required: true,
-    default: 'client'
+    default: 'user'
   },
   recoveryToken: {
     type: String,
     default: '',
+  },
+  provider: {
+    type: String,
+    default: 'pnova'
   },
   meta: {
     createdDate: {

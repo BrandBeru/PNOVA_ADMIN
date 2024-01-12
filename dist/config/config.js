@@ -33,7 +33,6 @@ function grantAccess(parent) {
                 _c = iterable_1_1.value;
                 _d = false;
                 const response = _c;
-                console.log(response);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -60,6 +59,12 @@ const config = {
     clientId: process.env.CLIENT_ID || '',
     clientSecret: process.env.CLIENT_SECRET || '',
     callbackUrl: process.env.CALLBACK_URL || '',
+    mClientId: process.env.M_CLIENT_ID || '',
+    mClientSecret: process.env.M_CLIENT_SECRET || '',
+    mCallbackUrl: process.env.M_CALLBACK_URL || '',
+    tConsumerSecret: process.env.T_CONSUMER_SECRET || '',
+    tCallbackUrl: process.env.T_CALLBACK_URL || '',
+    tConsumerKey: process.env.T_CONSUMER_KEY || '',
     project: process.env.PROJECT || '',
     version: process.env.VERSION || '',
     encode_password: process.env.ENCODE_PASSWORD || '',

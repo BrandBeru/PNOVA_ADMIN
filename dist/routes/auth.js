@@ -15,13 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const auth_service_1 = __importDefault(require("../services/auth.service"));
 const express_1 = __importDefault(require("express"));
-const user_service_1 = __importDefault(require("../services/user.service"));
 const auth_handler_1 = require("../middlewares/auth.handler");
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const auth_schema_1 = require("../schemas/auth.schema");
 const router = express_1.default.Router();
 const service = new auth_service_1.default();
-const userService = new user_service_1.default();
 router.post("/login", passport_1.default.authenticate("local", { session: false }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.user;
@@ -36,15 +34,33 @@ router.get("/google", passport_1.default.authenticate("google", { scope: ['email
 router.get("/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/api/v1/auth/google" }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userCb = req.user;
-        const user = yield userService.existUsersByEmail(userCb.email);
-        if (user.length) {
-            const token = yield service.signToken(user[0]);
-            res.json(token);
-        }
-        const rta = yield userService.create(userCb);
-        const token = yield service.signToken(rta);
+        const token = yield service.createAccount(userCb);
         res.json(token);
-        res.redirect("/");
+        res.redirect('/');
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get('/microsoft', passport_1.default.authenticate('microsoft', { prompt: 'select_account' }));
+router.get('/microsoft/callback', passport_1.default.authenticate('microsoft', { failureRedirect: '/login' }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userCb = req.user;
+        const token = yield service.createAccount(userCb);
+        res.json(token);
+        res.redirect('/');
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get('/twitter', passport_1.default.authenticate('twitter'));
+router.get('/twitter/callback', passport_1.default.authenticate('twitter', { failureRedirect: '/login' }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userCb = req.user;
+        const token = yield service.createAccount(userCb);
+        res.json(token);
+        res.redirect('/');
     }
     catch (error) {
         next(error);
@@ -74,9 +90,10 @@ router.post('/send-email', (0, validator_handler_1.default)(auth_schema_1.sendEm
     try {
         const object = {
             subject: req.body.subject,
+            to: req.body.to,
             html: req.body.html
         };
-        const rta = yield service.sendEmailToClients(object.subject, object.html);
+        const rta = yield service.emailSender(object.subject, object.html, object.to);
         res.json(rta);
     }
     catch (error) {

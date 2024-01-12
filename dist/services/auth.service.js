@@ -20,6 +20,18 @@ const config_1 = __importDefault(require("../config/config"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const service = new user_service_1.default();
 class AuthService {
+    createAccount(userCb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield service.findByEmail(userCb.email);
+            if (user) {
+                const token = yield this.signToken(user);
+                return token;
+            }
+            const rta = yield service.create(userCb);
+            const token = yield this.signToken(rta);
+            return token;
+        });
+    }
     getUser(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield service.findByEmail(email);
@@ -52,7 +64,7 @@ class AuthService {
             }
             const payload = { sub: user._id };
             const token = jsonwebtoken_1.default.sign(payload, config_1.default.jwtSecret, { expiresIn: "15min" });
-            yield service.updateOne(id, { recoveryToken: token });
+            yield service.updateOne(user._id, { recoveryToken: token });
             const link = `${config_1.default.frontend_url}/recovery?token=${token}`;
             const mail = {
                 from: config_1.default.email_user,
@@ -66,7 +78,7 @@ class AuthService {
             return yield this.sendEmail(mail);
         });
     }
-    sendEmailToClients(subject, html) {
+    emailSender(subject, html, to) {
         return __awaiter(this, void 0, void 0, function* () {
             const clients = yield service.getClients();
             const emails = clients.map((client) => client.email);

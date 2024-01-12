@@ -6,6 +6,7 @@ interface IUser{
   password: String,
   role: String,
   recoveryToken: String,
+  provider: String,
   meta: {
     createdDate: String;
     modifiedDate: String;

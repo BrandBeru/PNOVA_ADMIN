@@ -15,7 +15,7 @@ router.post(
   checkRoles("client"),
   async (req:any, res, next) => {
     try {
-      const userId = req.user.id
+      const userId = req.user.sub
       const body = req.body;
       const rta = await service.create({
         ...body,

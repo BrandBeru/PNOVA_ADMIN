@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmailSchema = exports.loginUserSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const email = joi_1.default.string().min(3);
-const password = joi_1.default.string().min(6);
-const subject = joi_1.default.string().min(5);
+const password = joi_1.default.string().min(6).max(200);
+const subject = joi_1.default.string().min(5).max(50);
+const to = joi_1.default.string().min(3).max(10);
 const greeting = joi_1.default.string().min(5);
 const info = joi_1.default.string().min(5);
 const farewell = joi_1.default.string().min(5);
@@ -34,6 +35,7 @@ const loginUserSchema = joi_1.default.object({
 exports.loginUserSchema = loginUserSchema;
 const sendEmailSchema = joi_1.default.object({
     subject: subject.required(),
+    to: to.required(),
     html: html.required()
 });
 exports.sendEmailSchema = sendEmailSchema;

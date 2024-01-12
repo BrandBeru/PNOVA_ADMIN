@@ -18,6 +18,7 @@ const verifyHandler = async (accessToken:any, refreshToken:any, profile:any, cb:
       username: `user${cb.id}`,
       email: cb.emails[0].value,
       password: password,
+      provider: cb.provider
     }
     return done(null, data)
   }catch(error:any){

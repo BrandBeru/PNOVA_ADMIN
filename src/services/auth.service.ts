@@ -7,6 +7,16 @@ import nodemailer from "nodemailer";
 
 const service = new UserService();
 class AuthService {
+  async createAccount(userCb: any) {
+    const user = await service.findByEmail(userCb.email);
+    if (user) {
+      const token = await this.signToken(user)
+      return token;
+    }
+    const rta = await service.create(userCb);
+    const token = await this.signToken(rta);
+    return token;
+  }
   async getUser(email: string, password: string) {
     const user = await service.findByEmail(email);
     if (!user) {
@@ -34,7 +44,7 @@ class AuthService {
     }
     const payload = { sub: user._id };
     const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "15min" });
-    await service.updateOne(id, { recoveryToken: token });
+    await service.updateOne(user._id, { recoveryToken: token });
     const link = `${config.frontend_url}/recovery?token=${token}`;
     const mail = {
       from: config.email_user,
@@ -55,7 +65,7 @@ class AuthService {
     };
     return await this.sendEmail(mail);
   }
-  async sendEmailToClients(subject: String, html: Object) {
+  async emailSender(subject: String, html: Object, to: string) {
     const clients = await service.getClients();
     const emails = clients.map((client) => client.email);
     const mail = {

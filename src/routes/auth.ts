@@ -1,14 +1,12 @@
 import passport from "passport";
 import AuthService from "../services/auth.service";
 import express from "express";
-import UserService from "../services/user.service";
 import { checkRoles } from "../middlewares/auth.handler";
 import validatorHandler from "../middlewares/validator.handler";
 import { sendEmailSchema } from "../schemas/auth.schema";
 
 const router = express.Router();
 const service = new AuthService();
-const userService = new UserService()
 
 router.post(
   "/login",
@@ -30,22 +28,36 @@ router.get(
   async (req, res, next) => {
     try{
       const userCb:any = req.user
-
-      const user = await userService.existUsersByEmail(userCb.email)
-      if(user.length){
-        const token = await service.signToken(user[0])
-        res.json(token)
-      }
-      const rta = await userService.create(userCb)
-      const token = await service.signToken(rta)
+      const token = await service.createAccount(userCb)
       res.json(token)
-
-      res.redirect("/");
+      res.redirect('/')
     }catch(error){
       next(error)
     }
   },
 );
+router.get('/microsoft', passport.authenticate('microsoft', {prompt: 'select_account'}))
+router.get('/microsoft/callback', passport.authenticate('microsoft', {failureRedirect: '/login'}), async (req, res, next) => {
+  try{
+    const userCb:any = req.user
+    const token = await service.createAccount(userCb)
+    res.json(token)
+    res.redirect('/')
+  }catch(error){
+    next(error)
+  }
+})
+router.get('/twitter', passport.authenticate('twitter'))
+router.get('/twitter/callback', passport.authenticate('twitter', {failureRedirect: '/login'}), async (req, res, next) => {
+  try{
+    const userCb:any = req.user
+    const token = await service.createAccount(userCb)
+    res.json(token)
+    res.redirect('/')
+  }catch(error){
+    next(error)
+  }
+})
 router.post('/recovery', passport.authenticate('jwt', {session: true}), async (req:any, res, next) => {
   try {
     const id = req.user.sub
@@ -68,9 +80,10 @@ router.post('/send-email', validatorHandler(sendEmailSchema, 'body'), passport.a
   try{
     const object = {
       subject: req.body.subject,
+      to: req.body.to,
       html: req.body.html
     }
-    const rta = await service.sendEmailToClients(object.subject, object.html)
+    const rta = await service.emailSender(object.subject, object.html, object.to)
     res.json(rta)
   }catch(error){
     next(error)
