@@ -19,9 +19,9 @@ router.post('/', validatorHandler(createNewSchema, 'body'), passport.authenticat
 })
 router.post('/like/:id', validatorHandler(findOneNewSchema, 'params'), passport.authenticate('jwt'), checkRoles('client', 'user'), async (req:any, res, next) => {
   try{
-    const newId = req.user.sub
+    const userId = req.user.sub
     const {id} = req.params
-    const rta = await service.like(newId, id)
+    const rta = await service.like(id, userId)
     res.json(rta)
   }catch(err){
     next(err)
