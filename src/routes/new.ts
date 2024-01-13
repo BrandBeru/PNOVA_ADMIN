@@ -53,3 +53,5 @@ router.patch('/:id', validatorHandler(findOneNewSchema, 'params'), passport.auth
     next(error)
   }
 })
+
+export default router

@@ -8,6 +8,7 @@ import serviceRouter from './service'
 import rateRouter from './rate'
 import channelRouter from './channel'
 import orderRouter from './order'
+import newsRouter from './new'
 import config from '../config/config'
 
 export default function routerApi(app: Express, server: Server, session: any){
@@ -20,4 +21,5 @@ export default function routerApi(app: Express, server: Server, session: any){
   router.use('/rates', rateRouter)
   router.use('/channels', channelRouter)
   router.use('/orders', orderRouter)
+  router.use('/news', newsRouter)
 }
