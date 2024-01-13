@@ -14,7 +14,7 @@ class NewService {
     return news
   }
   async findOne(id: string){
-    const rta = await New.findOne({_id: id}).populate({path: 'users', select: 'name lastName username meta'})
+    const rta = await New.findOne({_id: id}).populate({path: 'likes', select: 'name lastName username meta'})
     return rta
   }
   async updateOne(id: string, params: {}){

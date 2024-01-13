@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const id = Joi.string().min(5).max(15)
+const id = Joi.string().min(5)
 const title = Joi.string().min(3).max(120)
 const image = Joi.string().uri()
 const by = Joi.string().min(3).max(50)
