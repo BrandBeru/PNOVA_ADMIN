@@ -17,7 +17,7 @@ router.post('/', validatorHandler(createNewSchema, 'body'), passport.authenticat
     next(error)
   }
 })
-router.post('/like/:id', validatorHandler(findOneNewSchema, 'params'), passport.authenticate('jwt'), checkRoles('client', 'user'), async (req:any, res, next) => {
+router.post('/like/:id', validatorHandler(findOneNewSchema, 'params'), passport.authenticate('jwt'), checkRoles('client', 'user', 'admin'), async (req:any, res, next) => {
   try{
     const userId = req.user.sub
     const {id} = req.params

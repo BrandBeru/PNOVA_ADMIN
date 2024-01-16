@@ -31,6 +31,16 @@ router.post("/", (0, validator_handler_1.default)(rate_schema_1.createRateSchema
         next(error);
     }
 }));
+router.get('/testimonials', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { skip, limit } = req.query;
+        const rta = yield service.findByRating(skip, limit);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const skip = req.params.skip;

@@ -19,6 +19,9 @@ class NewService {
     }
     like(newId, id) {
         return __awaiter(this, void 0, void 0, function* () {
+            const liked = yield new_model_1.New.findOne({ _id: newId, likes: { $in: [id] } });
+            if (liked)
+                return { message: 'Already liked', liked: true };
             const rta = yield new_model_1.New.updateOne({ _id: newId }, { $push: { likes: id } });
             return rta;
         });
@@ -31,7 +34,7 @@ class NewService {
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rta = yield new_model_1.New.findOne({ _id: id }).populate({ path: 'users', select: 'name lastName username meta' });
+            const rta = yield new_model_1.New.findOne({ _id: id }).populate({ path: 'likes', select: 'name lastName username meta' });
             return rta;
         });
     }

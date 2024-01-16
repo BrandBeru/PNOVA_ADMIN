@@ -16,6 +16,21 @@ class RateService{
     const rate = await Rate.findOne({userId: id})
     return rate
   }
+  async findByRating(skip:number, limit:number){
+    const rates = await Rate.find({})
+    .populate({
+      path: "serviceId",
+      select: 'name description price'
+    })
+    .populate({
+      path: "userId",
+      select: 'username name lastName email'
+    })
+    .skip(skip)
+    .limit(limit)
+    .sort({rate: -1})
+    return rates
+  }
   async findByRate(rate: number, asc: boolean, skip:number, limit:number){
     const sort = asc ? 1 : -1
     const rates = await Rate.find({rate: rate})

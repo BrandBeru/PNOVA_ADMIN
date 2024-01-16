@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import INews from "../interfaces/INews"
 
 const NEW_DOCUMENT = 'news'
 

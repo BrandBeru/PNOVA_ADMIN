@@ -3,13 +3,13 @@ import LocalStrategy from './strategies/local.strategy'
 import JwtStrategy from './strategies/jwt.strategy'
 import GoogleOAuth from './strategies/google.strategy'
 import MicrosoftOAuth from './strategies/microsoft.strategy'
-import TwitterOAuth from './strategies/twitter.strategy'
+import LinkedinOAuth from './strategies/linkedin.strategy'
 
 passport.use(LocalStrategy)
 passport.use(JwtStrategy)
 passport.use(GoogleOAuth)
 passport.use(MicrosoftOAuth)
-passport.use(TwitterOAuth)
+passport.use(LinkedinOAuth)
 
 passport.serializeUser(function(user, done){
   done(null, user)

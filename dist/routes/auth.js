@@ -54,18 +54,18 @@ router.get('/microsoft/callback', passport_1.default.authenticate('microsoft', {
         next(error);
     }
 }));
-router.get('/twitter', passport_1.default.authenticate('twitter'));
-router.get('/twitter/callback', passport_1.default.authenticate('twitter', { failureRedirect: '/login' }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/linkedin', passport_1.default.authenticate('linkedin'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userCb = req.user;
-        const token = yield service.createAccount(userCb);
-        res.json(token);
+        //const token = await service.createAccount(userCb)
+        res.json(userCb);
         res.redirect('/');
     }
     catch (error) {
         next(error);
     }
 }));
+router.get('/linkedin/callback', passport_1.default.authenticate('linkedin', { failureRedirect: '/login', successRedirect: '/' }));
 router.post('/recovery', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.user.sub;

@@ -32,6 +32,23 @@ class RateService {
             return rate;
         });
     }
+    findByRating(skip, limit) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rates = yield rate_model_1.Rate.find({})
+                .populate({
+                path: "serviceId",
+                select: 'name description price'
+            })
+                .populate({
+                path: "userId",
+                select: 'username name lastName email'
+            })
+                .skip(skip)
+                .limit(limit)
+                .sort({ rate: -1 });
+            return rates;
+        });
+    }
     findByRate(rate, asc, skip, limit) {
         return __awaiter(this, void 0, void 0, function* () {
             const sort = asc ? 1 : -1;

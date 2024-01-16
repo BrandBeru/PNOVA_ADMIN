@@ -30,11 +30,11 @@ router.post('/', (0, validator_handler_1.default)(new_schema_1.createNewSchema, 
         next(error);
     }
 }));
-router.post('/like/:id', (0, validator_handler_1.default)(new_schema_1.findOneNewSchema, 'params'), passport_1.default.authenticate('jwt'), (0, auth_handler_1.checkRoles)('client', 'user'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/like/:id', (0, validator_handler_1.default)(new_schema_1.findOneNewSchema, 'params'), passport_1.default.authenticate('jwt'), (0, auth_handler_1.checkRoles)('client', 'user', 'admin'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newId = req.user.sub;
+        const userId = req.user.sub;
         const { id } = req.params;
-        const rta = yield service.like(newId, id);
+        const rta = yield service.like(id, userId);
         res.json(rta);
     }
     catch (err) {
@@ -70,3 +70,4 @@ router.patch('/:id', (0, validator_handler_1.default)(new_schema_1.findOneNewSch
         next(error);
     }
 }));
+exports.default = router;

@@ -11,6 +11,7 @@ const service_1 = __importDefault(require("./service"));
 const rate_1 = __importDefault(require("./rate"));
 const channel_1 = __importDefault(require("./channel"));
 const order_1 = __importDefault(require("./order"));
+const new_1 = __importDefault(require("./new"));
 const config_1 = __importDefault(require("../config/config"));
 function routerApi(app, server, session) {
     const router = express_1.default.Router();
@@ -22,5 +23,6 @@ function routerApi(app, server, session) {
     router.use('/rates', rate_1.default);
     router.use('/channels', channel_1.default);
     router.use('/orders', order_1.default);
+    router.use('/news', new_1.default);
 }
 exports.default = routerApi;

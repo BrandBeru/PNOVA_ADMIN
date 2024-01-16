@@ -27,6 +27,15 @@ router.post(
     }
   },
 );
+router.get('/testimonials', async (req:any, res, next) => {
+  try{
+    const {skip, limit} = req.query
+    const rta = await service.findByRating(skip, limit)
+    res.json(rta)
+  }catch(error){
+    next(error)
+  }
+})
 router.get("/", async (req:any, res:any, next) => {
   try{
     const skip = req.params.skip

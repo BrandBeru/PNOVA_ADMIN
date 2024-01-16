@@ -47,17 +47,17 @@ router.get('/microsoft/callback', passport.authenticate('microsoft', {failureRed
     next(error)
   }
 })
-router.get('/twitter', passport.authenticate('twitter'))
-router.get('/twitter/callback', passport.authenticate('twitter', {failureRedirect: '/login'}), async (req, res, next) => {
+router.get('/linkedin', passport.authenticate('linkedin'), async (req, res, next) => {
   try{
     const userCb:any = req.user
-    const token = await service.createAccount(userCb)
-    res.json(token)
+    //const token = await service.createAccount(userCb)
+    res.json(userCb)
     res.redirect('/')
   }catch(error){
     next(error)
   }
 })
+router.get('/linkedin/callback', passport.authenticate('linkedin', {failureRedirect: '/login', successRedirect: '/'}))
 router.post('/recovery', passport.authenticate('jwt', {session: true}), async (req:any, res, next) => {
   try {
     const id = req.user.sub
