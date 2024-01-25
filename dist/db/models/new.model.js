@@ -11,7 +11,7 @@ const NewSchema = new mongoose_1.default.Schema({
     title: { type: String, required: true },
     image: { type: String, required: true },
     by: { type: String, required: true, default: 'PNOVA STUDIIOS' },
-    likes: { type: [{ type: mongoose_1.default.Schema.Types.ObjectId, unique: true, ref: 'users' }], required: true },
+    likes: { type: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users' }], required: true },
     paragraphs: { type: [String], required: true },
     pictures: { type: [String], required: true },
     meta: {

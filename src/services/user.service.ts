@@ -30,7 +30,7 @@ class UserService{
     return user
   }
   async findOne(id: string){
-    const user = await User.findOne({$and: [{_id: id}, {"meta.isActive": true}]})
+    const user = await User.findOne({_id: id})
     return user
   }
   async getUserById(...ids:Array<string>){
@@ -40,7 +40,7 @@ class UserService{
     return users
   }
   async getById(id: string){
-    const user = await User.findOne({_id:id},{username:1, name:1, lastName:1, email:1, role:1})
+    const user = await User.findOne({_id:id},{username:1, name:1, lastName:1, email:1, role:1, meta: 1})
     return user
   }
   async getClients(){
@@ -56,15 +56,7 @@ class UserService{
     return rta
   }
   async updateOne(id:string, data:Object){
-    const user = await this.findOne(id)
-    const updated = {
-      ...data,
-      meta: {
-        ...user.meta,
-        modifiedDate: new Date()
-      }
-    }
-    const rta = await User.updateOne({$and: [{_id: id}, {"meta.isActive": true}]}, updated)
+    const rta = await User.updateOne({_id: id}, {$set: {"meta.modifiedDate": new Date()}, ...data})
     return rta
   }
   async existUsers(...users:Array<String>){
@@ -72,6 +64,9 @@ class UserService{
   }
   async existUsersByEmail(...users:Array<String>){
     return await User.exists({email: {$in: users}})
+  }
+  async updateActive(userId: string, active:boolean){
+    return await User.updateOne({_id: userId}, {$set: {"meta.isActive": active}})
   }
   async updateRole(userId: string, role: string){
     await User.updateOne({_id: userId}, {$set:{role:role}})

@@ -2,7 +2,10 @@ import { Rate } from "../db/models/rate.model"
 
 class RateService{
   async create(body: IRate){
-    const rate = await Rate.create(body)
+    const rate = (await Rate.create(body)).populate({
+      path: 'userId',
+      select: 'username, name, lastName, email, meta'
+    })
     return rate;
   }
   async find(skip:number, limit:number){

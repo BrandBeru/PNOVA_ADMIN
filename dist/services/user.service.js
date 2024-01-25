@@ -52,7 +52,7 @@ class UserService {
     }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.User.findOne({ $and: [{ _id: id }, { "meta.isActive": true }] });
+            const user = yield user_model_1.User.findOne({ _id: id });
             return user;
         });
     }
@@ -66,7 +66,7 @@ class UserService {
     }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.User.findOne({ _id: id }, { username: 1, name: 1, lastName: 1, email: 1, role: 1 });
+            const user = yield user_model_1.User.findOne({ _id: id }, { username: 1, name: 1, lastName: 1, email: 1, role: 1, meta: 1 });
             return user;
         });
     }
@@ -85,9 +85,7 @@ class UserService {
     }
     updateOne(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.findOne(id);
-            const updated = Object.assign(Object.assign({}, data), { meta: Object.assign(Object.assign({}, user.meta), { modifiedDate: new Date() }) });
-            const rta = yield user_model_1.User.updateOne({ $and: [{ _id: id }, { "meta.isActive": true }] }, updated);
+            const rta = yield user_model_1.User.updateOne({ _id: id }, Object.assign({ $set: { "meta.modifiedDate": new Date() } }, data));
             return rta;
         });
     }
@@ -99,6 +97,11 @@ class UserService {
     existUsersByEmail(...users) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield user_model_1.User.exists({ email: { $in: users } });
+        });
+    }
+    updateActive(userId, active) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield user_model_1.User.updateOne({ _id: userId }, { $set: { "meta.isActive": active } });
         });
     }
     updateRole(userId, role) {

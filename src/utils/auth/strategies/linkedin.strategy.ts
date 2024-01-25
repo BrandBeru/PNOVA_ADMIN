@@ -8,7 +8,7 @@ const options:any = {
   clientID: config.lClientID,
   clientSecret: config.lClientSecret,
   callbackURL: config.lCallbackUrl,
-  scope: ['r_emailaddress', 'r_liteprofile'],
+  scope: ['email', 'profile'],
   state: true
 }
 

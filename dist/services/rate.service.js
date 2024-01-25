@@ -13,7 +13,10 @@ const rate_model_1 = require("../db/models/rate.model");
 class RateService {
     create(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rate = yield rate_model_1.Rate.create(body);
+            const rate = (yield rate_model_1.Rate.create(body)).populate({
+                path: 'userId',
+                select: 'username, name, lastName, email, meta'
+            });
             return rate;
         });
     }

@@ -30,10 +30,10 @@ router.get("/name/:name", (0, validator_handler_1.default)(users_schema_1.findUs
         next(error);
     }
 }));
-router.get("/:username", passport_1.default.authenticate("jwt", { session: true }), (0, auth_handler_1.checkRoles)("user", "admin"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/account", passport_1.default.authenticate("jwt", { session: true }), (0, auth_handler_1.checkRoles)("user", "admin", "client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { username } = req.params;
-        const rta = yield service.findByUsername(username);
+        const id = req.user.sub;
+        const rta = yield service.getById(id);
         res.json(rta);
     }
     catch (error) {

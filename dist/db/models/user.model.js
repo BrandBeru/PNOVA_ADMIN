@@ -63,6 +63,13 @@ const UserSchema = new mongoose_1.Schema({
         type: String,
         default: 'pnova'
     },
+    profilePicture: {
+        type: String
+    },
+    lastLoginDate: {
+        type: Date,
+        default: Date.now()
+    },
     meta: {
         createdDate: {
             type: Date,
@@ -74,7 +81,7 @@ const UserSchema = new mongoose_1.Schema({
         },
         isActive: {
             type: Boolean,
-            default: true
+            default: false
         }
     }
 });

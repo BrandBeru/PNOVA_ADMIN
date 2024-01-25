@@ -38,6 +38,13 @@ const UserSchema: Schema = new Schema<IUser>({
     type: String,
     default: 'pnova'
   },
+  profilePicture: {
+    type: String
+  },
+  lastLoginDate: {
+    type: Date,
+    default: Date.now()
+  },
   meta: {
     createdDate: {
       type: Date,
@@ -49,7 +56,7 @@ const UserSchema: Schema = new Schema<IUser>({
     },
     isActive: {
       type: Boolean,
-      default: true
+      default: false
     }
   }
 })

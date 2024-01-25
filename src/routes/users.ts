@@ -24,22 +24,22 @@ router.get(
     } catch (error) {
       next(error);
     }
-  },
-);
+  }
+)
 router.get(
-  "/:username",
+  "/account",
   passport.authenticate("jwt", { session: true }),
-  checkRoles("user", "admin"),
-  async (req, res, next) => {
+  checkRoles("user", "admin", "client"),
+  async (req:any, res, next) => {
     try {
-      const { username } = req.params;
-      const rta = await service.findByUsername(username);
+      const id = req.user.sub;
+      const rta = await service.getById(id);
       res.json(rta);
     } catch (error) {
       next(error);
     }
-  },
-);
+  }
+)
 router.post(
   "/",
   validatorHandler(createUserSchema, "body"),
@@ -51,8 +51,8 @@ router.post(
     } catch (err) {
       next(err);
     }
-  },
-);
+  }
+)
 router.patch(
   "/edit",
   passport.authenticate("jwt", { session: true }),
@@ -66,14 +66,14 @@ router.patch(
     }catch(error){
       next(error)
     }
-  },
-);
+  }
+)
 router.delete(
   "/",
   validatorHandler(getUserSchema, "params"),
   async (req, res, next) => {
     res.send("(DELETE) users/");
-  },
-);
+  }
+)
 
 export default router;

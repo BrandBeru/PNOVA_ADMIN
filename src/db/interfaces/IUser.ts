@@ -7,6 +7,8 @@ interface IUser{
   role: String,
   recoveryToken: String,
   provider: String,
+  profilePicture: String,
+  lastLoginDate: String,
   meta: {
     createdDate: String;
     modifiedDate: String;

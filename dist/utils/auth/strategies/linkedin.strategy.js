@@ -20,7 +20,7 @@ const options = {
     clientID: config_1.default.lClientID,
     clientSecret: config_1.default.lClientSecret,
     callbackURL: config_1.default.lCallbackUrl,
-    scope: ['r_emailaddress', 'r_liteprofile'],
+    scope: ['email', 'profile'],
     state: true
 };
 const verifyHandler = (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {

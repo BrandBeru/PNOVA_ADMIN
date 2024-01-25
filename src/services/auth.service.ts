@@ -33,7 +33,8 @@ class AuthService {
       sub: user._id,
       scope: user.role,
     };
-    const secret: string = config.jwtSecret || "";
+    await service.updateOne(payload.sub, {lastLoginDate: new Date()});
+    const secret: string = config.jwtSecret;
     const token = jwt.sign(payload, secret);
     return token;
   }
@@ -51,7 +52,7 @@ class AuthService {
       to: `${user.email}`,
       subject: `PNOVA\\VIGE STUDIIOS - Password recovery`,
       html: this.emailStructure(
-        `Hola Giovanny Bernal,`,
+        `Hola ${user.name} ${user.lastName},`,
         "Aqui esta el link para reestablecer tu contraseña, lamentamos cualquier inconveniente presentado.",
         { text: "Reset your password", url: link },
         `Equipo PNOVA\VIGE, conoce mas en: <a class="link" href="https://pnovastudios.xyz/about">https://pnovastudios.xyz/about</a>`,
@@ -64,6 +65,44 @@ class AuthService {
       ),
     };
     return await this.sendEmail(mail);
+  }
+  async sendEmailActivation(id: string){
+    const user = await service.getById(id);
+    if (!user) {
+      throw boom.notFound();
+    }
+    const payload = { sub: user._id };
+    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "15min" });
+    await service.updateOne(user._id, { recoveryToken: token });
+    const link = `${config.frontend_url}/recovery?token=${token}`;
+    const mail = {
+      from: config.email_user,
+      to: `${user.email}`,
+      subject: `PNOVA\\VIGE STUDIIOS - Account activation`,
+      html: this.emailStructure(
+        `Hola ${user.name} ${user.lastName},`,
+        "Aqui esta el link para activar tu correo.",
+        { text: "Activate your account", url: link },
+        `Equipo PNOVA\VIGE, conoce mas en: <a class="link" href="https://pnovastudios.xyz/about">https://pnovastudios.xyz/about</a>`,
+        user.email,
+        `Este link solo sera valido por los proximos 15 minutos.
+        Una vez pase el tiempo estimado tendras que volver a solicitar uno nuevo en nuestro sitio web.
+        Si tienes alguna pregunta o feedback, no respondas a este email envianos un correo a:
+        <a class="link" href="mailto:support@pnovastudios.xyz">support@pnovastudios.xyz</a>`,
+        "Ten un excelente dia!",
+      ),
+    };
+    return await this.sendEmail(mail);
+  }
+  async activeAccount(token:string){
+    const payload = jwt.verify(token, config.jwtSecret);
+    const sub: any = payload.sub;
+    const user = await service.findOne(sub);
+    if (user.recoveryToken !== token) {
+      throw boom.unauthorized();
+    }
+    await service.updateOne(user._id, { recoveryToken: "", "meta.isActive": true});
+    return { message: "Account active successfully!" };
   }
   async emailSender(subject: String, html: Object, to: string) {
     const clients = await service.getClients();
