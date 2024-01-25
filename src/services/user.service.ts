@@ -40,7 +40,7 @@ class UserService{
     return users
   }
   async getById(id: string){
-    const user = await User.findOne({_id:id},{username:1, name:1, lastName:1, email:1, role:1, meta: 1})
+    const user = await User.findOne({_id:id},{username:1, name:1, lastName:1, email:1, role:1, meta: 1, lastLoginDate:1, ProfilePicture:1, provider:1})
     return user
   }
   async getClients(){
