@@ -29,6 +29,7 @@ class AuthService {
             }
             const rta = yield service.create(userCb);
             const token = yield this.signToken(rta);
+            yield service.updateActive(user._id, true);
             return token;
         });
     }

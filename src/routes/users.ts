@@ -8,10 +8,12 @@ import {
 import validatorHandler from "../middlewares/validator.handler";
 import passport from "passport";
 import { checkRoles } from "../middlewares/auth.handler";
+import AuthService from "../services/auth.service";
 
 const router: Router = express.Router();
 
 const service = new UserService();
+const authService = new AuthService();
 
 router.get(
   "/name/:name",
@@ -47,7 +49,8 @@ router.post(
     try {
       const body = req.body;
       const user = await service.create(body);
-      res.status(201).json(user);
+      const rta = await authService.sendEmailActivation(user._id);
+      res.status(201).json(rta);
     } catch (err) {
       next(err);
     }

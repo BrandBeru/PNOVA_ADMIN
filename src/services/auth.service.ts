@@ -15,6 +15,7 @@ class AuthService {
     }
     const rta = await service.create(userCb);
     const token = await this.signToken(rta);
+    await service.updateActive(user._id, true);
     return token;
   }
   async getUser(email: string, password: string) {

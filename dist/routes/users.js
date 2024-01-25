@@ -18,8 +18,10 @@ const users_schema_1 = require("../schemas/users.schema");
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const passport_1 = __importDefault(require("passport"));
 const auth_handler_1 = require("../middlewares/auth.handler");
+const auth_service_1 = __importDefault(require("../services/auth.service"));
 const router = express_1.default.Router();
 const service = new user_service_1.default();
+const authService = new auth_service_1.default();
 router.get("/name/:name", (0, validator_handler_1.default)(users_schema_1.findUserByName, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name } = req.params;
@@ -44,7 +46,8 @@ router.post("/", (0, validator_handler_1.default)(users_schema_1.createUserSchem
     try {
         const body = req.body;
         const user = yield service.create(body);
-        res.status(201).json(user);
+        const rta = yield authService.sendEmailActivation(user._id);
+        res.status(201).json(rta);
     }
     catch (err) {
         next(err);
