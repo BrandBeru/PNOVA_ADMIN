@@ -86,7 +86,7 @@ router.patch('/change-password', passport.authenticate('jwt', {session: true}), 
     next(error)
   }
 })
-router.post('/activate', passport.authenticate('jwt', {session: true}), async (req:any, res, next) => {
+router.post('/activate', async (req:any, res, next) => {
   try{
     const {token} = req.body
     const rta = await service.activeAccount(token)
