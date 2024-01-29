@@ -5,6 +5,7 @@ import { checkRoles } from "../middlewares/auth.handler";
 import validatorHandler from "../middlewares/validator.handler";
 import { sendEmailSchema } from "../schemas/auth.schema";
 import UserService from "../services/user.service";
+import { createUserSchema } from "../schemas/users.schema";
 
 const router = express.Router();
 const service = new AuthService();
@@ -16,7 +17,7 @@ router.post(
     try {
       const user = req.user;
       const rta = await service.signToken(user);
-      res.json(rta);
+      res.send(rta);
     } catch (error) {
       next(error);
     }
@@ -77,6 +78,15 @@ router.post('/activation', passport.authenticate('jwt', {session: true}), async 
     next(error)
   }
 })
+router.post('/activate', async (req:any, res, next) => {
+  try{
+    const {token} = req.body
+    const rta = await service.activeAccount(token)
+    res.send(rta)
+  }catch(error){
+    next(error);
+  }
+})
 router.patch('/change-password', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
   try{
     const {token, newPassword} = req.body
@@ -84,15 +94,6 @@ router.patch('/change-password', passport.authenticate('jwt', {session: true}), 
     res.json(rta)
   }catch(error){
     next(error)
-  }
-})
-router.post('/activate', async (req:any, res, next) => {
-  try{
-    const {token} = req.body
-    const rta = await service.activeAccount(token)
-    res.json(rta)
-  }catch(error){
-    next(error);
   }
 })
 router.post('/send-email', validatorHandler(sendEmailSchema, 'body'), passport.authenticate('jwt', {session: true}), checkRoles('admin'), async (req, res, next) => {

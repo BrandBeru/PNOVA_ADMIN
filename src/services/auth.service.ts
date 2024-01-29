@@ -103,7 +103,8 @@ class AuthService {
       throw boom.unauthorized();
     }
     await service.updateOne(user._id, { recoveryToken: "", "meta.isActive": true});
-    return { message: "Account active successfully!" };
+    const rta = await this.signToken(user)
+    return rta;
   }
   async emailSender(subject: String, html: Object, to: string) {
     const clients = await service.getClients();

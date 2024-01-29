@@ -111,7 +111,8 @@ class AuthService {
                 throw boom_1.default.unauthorized();
             }
             yield service.updateOne(user._id, { recoveryToken: "", "meta.isActive": true });
-            return { message: "Account active successfully!" };
+            const rta = yield this.signToken(user);
+            return rta;
         });
     }
     emailSender(subject, html, to) {

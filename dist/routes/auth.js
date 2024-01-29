@@ -24,7 +24,7 @@ router.post("/login", passport_1.default.authenticate("local", { session: false 
     try {
         const user = req.user;
         const rta = yield service.signToken(user);
-        res.json(rta);
+        res.send(rta);
     }
     catch (error) {
         next(error);
@@ -86,20 +86,20 @@ router.post('/activation', passport_1.default.authenticate('jwt', { session: tru
         next(error);
     }
 }));
-router.patch('/change-password', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/activate', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { token, newPassword } = req.body;
-        const rta = yield service.changePassword(token, newPassword);
-        res.json(rta);
+        const { token } = req.body;
+        const rta = yield service.activeAccount(token);
+        res.send(rta);
     }
     catch (error) {
         next(error);
     }
 }));
-router.post('/activate', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch('/change-password', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { token } = req.body;
-        const rta = yield service.activeAccount(token);
+        const { token, newPassword } = req.body;
+        const rta = yield service.changePassword(token, newPassword);
         res.json(rta);
     }
     catch (error) {
