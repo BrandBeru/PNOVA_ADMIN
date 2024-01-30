@@ -30,7 +30,9 @@ const verifyHandler = (accessToken, refreshToken, profile, cb, done) => __awaite
             username: `user${cb.id}`,
             email: cb.emails[0].value,
             password: password,
-            provider: cb.provider
+            provider: cb.provider,
+            profilePicture: cb.photos[0].value,
+            "meta.isActive": true
         };
         return done(null, data);
     }

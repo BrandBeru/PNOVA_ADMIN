@@ -66,7 +66,7 @@ class UserService {
     }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.User.findOne({ _id: id }, { username: 1, name: 1, lastName: 1, email: 1, role: 1, meta: 1, lastLoginDate: 1, ProfilePicture: 1, provider: 1 });
+            const user = yield user_model_1.User.findOne({ _id: id }, { username: 1, name: 1, lastName: 1, email: 1, role: 1, meta: 1, lastLoginDate: 1, profilePicture: 1, provider: 1 });
             return user;
         });
     }

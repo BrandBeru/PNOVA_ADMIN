@@ -35,7 +35,7 @@ router.get("/google/callback", passport_1.default.authenticate("google", { failu
     try {
         const userCb = req.user;
         const token = yield service.createAccount(userCb);
-        res.json(token);
+        res.send(token);
         res.redirect('/');
     }
     catch (error) {
@@ -47,7 +47,7 @@ router.get('/microsoft/callback', passport_1.default.authenticate('microsoft', {
     try {
         const userCb = req.user;
         const token = yield service.createAccount(userCb);
-        res.json(token);
+        res.send(token);
         res.redirect('/');
     }
     catch (error) {
@@ -58,7 +58,7 @@ router.get('/linkedin', passport_1.default.authenticate('linkedin'), (req, res, 
     try {
         const userCb = req.user;
         //const token = await service.createAccount(userCb)
-        res.json(userCb);
+        res.send(userCb);
         res.redirect('/');
     }
     catch (error) {
@@ -66,10 +66,20 @@ router.get('/linkedin', passport_1.default.authenticate('linkedin'), (req, res, 
     }
 }));
 router.get('/linkedin/callback', passport_1.default.authenticate('linkedin', { failureRedirect: '/login', successRedirect: '/' }));
-router.post('/recovery', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/change-password', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.user.sub;
-        const rta = yield service.sendRecoveryPassword(id);
+        const rta = yield service.sendChangePassword(id);
+        res.json(rta);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.post('/recovery-password', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email } = req.body;
+        const rta = yield service.sendRecoveryPassword(email);
         res.json(rta);
     }
     catch (error) {
@@ -96,7 +106,7 @@ router.post('/activate', (req, res, next) => __awaiter(void 0, void 0, void 0, f
         next(error);
     }
 }));
-router.patch('/change-password', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch('/reset-password', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { token, newPassword } = req.body;
         const rta = yield service.changePassword(token, newPassword);

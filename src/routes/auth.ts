@@ -31,7 +31,7 @@ router.get(
     try{
       const userCb:any = req.user
       const token = await service.createAccount(userCb)
-      res.json(token)
+      res.send(token)
       res.redirect('/')
     }catch(error){
       next(error)
@@ -43,7 +43,7 @@ router.get('/microsoft/callback', passport.authenticate('microsoft', {failureRed
   try{
     const userCb:any = req.user
     const token = await service.createAccount(userCb)
-    res.json(token)
+    res.send(token)
     res.redirect('/')
   }catch(error){
     next(error)
@@ -53,17 +53,26 @@ router.get('/linkedin', passport.authenticate('linkedin'), async (req, res, next
   try{
     const userCb:any = req.user
     //const token = await service.createAccount(userCb)
-    res.json(userCb)
+    res.send(userCb)
     res.redirect('/')
   }catch(error){
     next(error)
   }
 })
 router.get('/linkedin/callback', passport.authenticate('linkedin', {failureRedirect: '/login', successRedirect: '/'}))
-router.post('/recovery', passport.authenticate('jwt', {session: true}), async (req:any, res, next) => {
+router.post('/change-password', passport.authenticate('jwt', {session: true}), async (req:any, res, next) => {
   try {
     const id = req.user.sub
-    const rta = await service.sendRecoveryPassword(id)
+    const rta = await service.sendChangePassword(id)
+    res.json(rta)
+  } catch (error) {
+    next(error)
+  }
+})
+router.post('/recovery-password', async (req:any, res, next) => {
+  try {
+    const {email} = req.body;
+    const rta = await service.sendRecoveryPassword(email)
     res.json(rta)
   } catch (error) {
     next(error)
@@ -87,7 +96,7 @@ router.post('/activate', async (req:any, res, next) => {
     next(error);
   }
 })
-router.patch('/change-password', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+router.patch('/reset-password', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
   try{
     const {token, newPassword} = req.body
     const rta = await service.changePassword(token, newPassword)

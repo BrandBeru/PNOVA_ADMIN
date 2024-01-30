@@ -29,7 +29,6 @@ class AuthService {
             }
             const rta = yield service.create(userCb);
             const token = yield this.signToken(rta);
-            yield service.updateActive(user._id, true);
             return token;
         });
     }
@@ -58,7 +57,7 @@ class AuthService {
             return token;
         });
     }
-    sendRecoveryPassword(id) {
+    sendChangePassword(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield service.getById(id);
             if (!user) {
@@ -80,6 +79,28 @@ class AuthService {
             return yield this.sendEmail(mail);
         });
     }
+    sendRecoveryPassword(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield service.findByEmail(email);
+            if (!user) {
+                throw boom_1.default.notFound();
+            }
+            const payload = { sub: user._id };
+            const token = jsonwebtoken_1.default.sign(payload, config_1.default.jwtSecret, { expiresIn: "15min" });
+            yield service.updateOne(user._id, { recoveryToken: token });
+            const link = `${config_1.default.frontend_url}/recovery?token=${token}`;
+            const mail = {
+                from: config_1.default.email_user,
+                to: `${user.email}`,
+                subject: `PNOVA\\VIGE STUDIIOS - Reset your password`,
+                html: this.emailStructure(`Hola ${user.name} ${user.lastName},`, "Aqui esta el link para reestablecer tu contraseña, lamentamos cualquier inconveniente presentado.", { text: "Reset your password", url: link }, `Equipo PNOVA\VIGE, conoce mas en: <a class="link" href="https://pnovastudios.xyz/about">https://pnovastudios.xyz/about</a>`, user.email, `Este link solo sera valido por los proximos 15 minutos.
+        Una vez pase el tiempo estimado tendras que volver a solicitar uno nuevo en nuestro sitio web.
+        Si tienes alguna pregunta o feedback, no respondas a este email envianos un correo a:
+        <a class="link" href="mailto:support@pnovastudios.xyz">support@pnovastudios.xyz</a>`, "Ten un excelente dia!"),
+            };
+            return yield this.sendEmail(mail);
+        });
+    }
     sendEmailActivation(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield service.getById(id);
@@ -89,7 +110,7 @@ class AuthService {
             const payload = { sub: user._id };
             const token = jsonwebtoken_1.default.sign(payload, config_1.default.jwtSecret, { expiresIn: "15min" });
             yield service.updateOne(user._id, { recoveryToken: token });
-            const link = `${config_1.default.frontend_url}/recovery?token=${token}`;
+            const link = `${config_1.default.frontend_url}/activate?token=${token}`;
             const mail = {
                 from: config_1.default.email_user,
                 to: `${user.email}`,
@@ -254,7 +275,7 @@ class AuthService {
             }
             const hash = yield bcryptjs_1.default.hash(newPassword, 10);
             yield service.updateOne(user._id, { recoveryToken: "", password: hash });
-            return { message: "Password changes successfully!" };
+            return { message: "Password changed successfully!" };
         });
     }
     sendEmail(email) {
