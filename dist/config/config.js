@@ -61,7 +61,7 @@ const config = {
     callbackUrl: process.env.CALLBACK_URL || '',
     mClientId: process.env.M_CLIENT_ID || '',
     mClientSecret: process.env.M_CLIENT_SECRET || '',
-    mCallbackUrl: process.env.L_CALLBACK_URL || '',
+    mCallbackUrl: process.env.M_CALLBACK_URL || '',
     lClientSecret: process.env.L_CLIENT_SECRET || '',
     lCallbackUrl: process.env.L_CALLBACK_URL || '',
     lClientID: process.env.L_CLIENT_ID || '',

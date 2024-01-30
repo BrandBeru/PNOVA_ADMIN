@@ -18,7 +18,7 @@ const host = config_1.default.host;
 const port = config_1.default.port || 3000;
 app.set("trust proxy", 1);
 const secret = config_1.default.jwtSecret;
-const days = 1000 * 60 * 60 * 24 * 15;
+const days = 1000 * 60 * 60 * 24 * 7;
 const sessionMidddleware = (0, express_session_1.default)({
     secret: secret,
     resave: false,

@@ -3,7 +3,7 @@ import AuthService from "../services/auth.service";
 import express from "express";
 import { checkRoles } from "../middlewares/auth.handler";
 import validatorHandler from "../middlewares/validator.handler";
-import { sendEmailSchema } from "../schemas/auth.schema";
+import { activateUserSchema, sendEmailSchema } from "../schemas/auth.schema";
 import UserService from "../services/user.service";
 import { createUserSchema } from "../schemas/users.schema";
 
@@ -78,10 +78,10 @@ router.post('/recovery-password', async (req:any, res, next) => {
     next(error)
   }
 })
-router.post('/activation', passport.authenticate('jwt', {session: true}), async (req:any, res, next) => {
+router.post('/activation', validatorHandler(activateUserSchema, 'body'), async (req:any, res, next) => {
   try{
-    const id = req.user.sub
-    const rta = await service.sendEmailActivation(id);
+    const {email} = req.body
+    const rta = await service.sendEmailActivation(email);
     res.json(rta)
   }catch(error){
     next(error)
@@ -96,7 +96,7 @@ router.post('/activate', async (req:any, res, next) => {
     next(error);
   }
 })
-router.patch('/reset-password', passport.authenticate('jwt', {session: true}), async (req, res, next) => {
+router.patch('/reset-password', async (req, res, next) => {
   try{
     const {token, newPassword} = req.body
     const rta = await service.changePassword(token, newPassword)

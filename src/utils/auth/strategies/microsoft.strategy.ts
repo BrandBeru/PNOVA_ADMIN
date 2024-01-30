@@ -15,11 +15,13 @@ const options = {
 const verifyHandler = async (accessToken:any, refreshToken:any, profile:any, done:any) => {
   try{
     const password = await fetch('https://passwordinator.onrender.com?num=true&char=true&caps=true&len=32').then(data => data.json())
+    console.log(profile)
     const data:any = {
       name: profile.name.givenName,
       lastName: profile.name.familyName,
       username: `user${profile.id}`,
       email: profile.emails[0].value,
+      profilePicture: '',
       password: password,
       provider: profile.provider
     }

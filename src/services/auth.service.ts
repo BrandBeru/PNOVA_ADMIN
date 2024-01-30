@@ -94,8 +94,8 @@ class AuthService {
     };
     return await this.sendEmail(mail);
   }
-  async sendEmailActivation(id: string){
-    const user = await service.getById(id);
+  async sendEmailActivation(email: string){
+    const user = await service.findByEmail(email);
     if (!user) {
       throw boom.notFound();
     }

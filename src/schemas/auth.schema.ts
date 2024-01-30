@@ -37,4 +37,8 @@ const sendEmailSchema = Joi.object({
   html: html.required()
 })
 
-export {loginUserSchema, sendEmailSchema}
+const activateUserSchema = Joi.object({
+  email: email.required()
+})
+
+export {loginUserSchema, sendEmailSchema, activateUserSchema}

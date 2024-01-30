@@ -86,10 +86,10 @@ router.post('/recovery-password', (req, res, next) => __awaiter(void 0, void 0, 
         next(error);
     }
 }));
-router.post('/activation', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/activation', (0, validator_handler_1.default)(auth_schema_1.activateUserSchema, 'body'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.user.sub;
-        const rta = yield service.sendEmailActivation(id);
+        const { email } = req.body;
+        const rta = yield service.sendEmailActivation(email);
         res.json(rta);
     }
     catch (error) {
@@ -106,7 +106,7 @@ router.post('/activate', (req, res, next) => __awaiter(void 0, void 0, void 0, f
         next(error);
     }
 }));
-router.patch('/reset-password', passport_1.default.authenticate('jwt', { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch('/reset-password', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { token, newPassword } = req.body;
         const rta = yield service.changePassword(token, newPassword);

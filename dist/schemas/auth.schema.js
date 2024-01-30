@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmailSchema = exports.loginUserSchema = void 0;
+exports.activateUserSchema = exports.sendEmailSchema = exports.loginUserSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const email = joi_1.default.string().min(3);
 const password = joi_1.default.string().min(6).max(200);
@@ -39,3 +39,7 @@ const sendEmailSchema = joi_1.default.object({
     html: html.required()
 });
 exports.sendEmailSchema = sendEmailSchema;
+const activateUserSchema = joi_1.default.object({
+    email: email.required()
+});
+exports.activateUserSchema = activateUserSchema;

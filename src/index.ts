@@ -22,7 +22,7 @@ const port: any = config.port || 3000;
 
 app.set("trust proxy", 1);
 const secret: any = config.jwtSecret;
-const days = 1000*60*60*24*15
+const days = 1000*60*60*24*7
 const sessionMidddleware = session({
   secret: secret,
   resave: false,
