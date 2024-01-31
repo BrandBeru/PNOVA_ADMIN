@@ -101,9 +101,9 @@ class AuthService {
             return yield this.sendEmail(mail);
         });
     }
-    sendEmailActivation(email) {
+    sendEmailActivation(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield service.findByEmail(email);
+            const user = yield service.getById(id);
             if (!user) {
                 throw boom_1.default.notFound();
             }
