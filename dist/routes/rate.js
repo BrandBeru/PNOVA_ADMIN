@@ -65,7 +65,7 @@ router.get("/level/:level", (0, validator_handler_1.default)(rate_schema_1.findR
         next(error);
     }
 }));
-router.get("/me", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/me", passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client", "admin"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.user.sub;
         const rta = yield service.findByUserId(id);

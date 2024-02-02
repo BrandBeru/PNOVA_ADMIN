@@ -4,6 +4,7 @@ import {
   createUserSchema,
   findUserByName,
   getUserSchema,
+  updateUserSchema,
 } from "../schemas/users.schema";
 import validatorHandler from "../middlewares/validator.handler";
 import passport from "passport";
@@ -58,8 +59,8 @@ router.post(
 )
 router.patch(
   "/edit",
+  validatorHandler(updateUserSchema, "body"),
   passport.authenticate("jwt", { session: true }),
-  validatorHandler(getUserSchema, "params"),
   async (req: any, res, next) => {
     try{
       const username = req.user.sub;

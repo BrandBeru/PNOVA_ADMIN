@@ -63,7 +63,7 @@ async (req:any, res:any, next) => {
 router.get(
   "/me",
   passport.authenticate("jwt"),
-  checkRoles("client"),
+  checkRoles("client", "admin"),
   async (req:any, res, next) => {
     try{
       const id = req.user.sub

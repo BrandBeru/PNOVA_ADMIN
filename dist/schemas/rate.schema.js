@@ -10,7 +10,7 @@ const serviceId = joi_1.default.string().min(5);
 const rate = joi_1.default.number().min(1).max(5);
 const message = joi_1.default.string().max(200);
 const createRateSchema = joi_1.default.object({
-    serviceId: serviceId.required(),
+    serviceId: serviceId,
     rate: rate.required(),
     message: message
 });

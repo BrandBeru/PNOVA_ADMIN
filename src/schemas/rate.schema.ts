@@ -6,7 +6,7 @@ const rate = Joi.number().min(1).max(5)
 const message = Joi.string().max(200)
 
 const createRateSchema = Joi.object({
-  serviceId: serviceId.required(),
+  serviceId: serviceId,
   rate: rate.required(),
   message: message
 })

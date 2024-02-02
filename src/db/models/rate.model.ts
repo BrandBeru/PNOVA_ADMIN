@@ -3,8 +3,8 @@ import mongoose, { Schema } from "mongoose";
 const RATE_DOCUMENT = "rates";
 
 const RateSchema = new Schema<IRate>({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
-  serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'services', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true, unique: true },
+  serviceId: { type: String, default: 'pnova', ref: 'services' },
   rate: { type: Number, required: true },
   message: { type: String },
   meta: {

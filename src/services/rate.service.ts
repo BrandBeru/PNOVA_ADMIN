@@ -4,14 +4,14 @@ class RateService{
   async create(body: IRate){
     const rate = (await Rate.create(body)).populate({
       path: 'userId',
-      select: 'username, name, lastName, email, meta'
+      select: 'username name lastName email meta profilePicture'
     })
     return rate;
   }
   async find(skip:number, limit:number){
     const rates = await Rate.find({}).populate({
       path: 'userId',
-      select: 'username, name, lastName, email, meta'
+      select: 'username name lastName email meta profilePicture'
     }).skip(skip).limit(limit)
     return rates
   }
@@ -22,12 +22,8 @@ class RateService{
   async findByRating(skip:number, limit:number){
     const rates = await Rate.find({})
     .populate({
-      path: "serviceId",
-      select: 'name description price'
-    })
-    .populate({
       path: "userId",
-      select: 'username name lastName email'
+      select: 'username name lastName email profilePicture'
     })
     .skip(skip)
     .limit(limit)

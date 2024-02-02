@@ -15,7 +15,7 @@ class RateService {
         return __awaiter(this, void 0, void 0, function* () {
             const rate = (yield rate_model_1.Rate.create(body)).populate({
                 path: 'userId',
-                select: 'username, name, lastName, email, meta'
+                select: 'username name lastName email meta profilePicture'
             });
             return rate;
         });
@@ -24,7 +24,7 @@ class RateService {
         return __awaiter(this, void 0, void 0, function* () {
             const rates = yield rate_model_1.Rate.find({}).populate({
                 path: 'userId',
-                select: 'username, name, lastName, email, meta'
+                select: 'username name lastName email meta profilePicture'
             }).skip(skip).limit(limit);
             return rates;
         });
@@ -39,12 +39,8 @@ class RateService {
         return __awaiter(this, void 0, void 0, function* () {
             const rates = yield rate_model_1.Rate.find({})
                 .populate({
-                path: "serviceId",
-                select: 'name description price'
-            })
-                .populate({
                 path: "userId",
-                select: 'username name lastName email'
+                select: 'username name lastName email profilePicture'
             })
                 .skip(skip)
                 .limit(limit)

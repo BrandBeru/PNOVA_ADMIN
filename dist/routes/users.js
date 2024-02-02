@@ -53,7 +53,7 @@ router.post("/", (0, validator_handler_1.default)(users_schema_1.createUserSchem
         next(err);
     }
 }));
-router.patch("/edit", passport_1.default.authenticate("jwt", { session: true }), (0, validator_handler_1.default)(users_schema_1.getUserSchema, "params"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/edit", (0, validator_handler_1.default)(users_schema_1.updateUserSchema, "body"), passport_1.default.authenticate("jwt", { session: true }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const username = req.user.sub;
         const body = req.body;

@@ -28,8 +28,8 @@ const mongoose_1 = __importStar(require("mongoose"));
 const RATE_DOCUMENT = "rates";
 exports.RATE_DOCUMENT = RATE_DOCUMENT;
 const RateSchema = new mongoose_1.Schema({
-    userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
-    serviceId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'services', required: true },
+    userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true, unique: true },
+    serviceId: { type: String, default: 'pnova', ref: 'services' },
     rate: { type: Number, required: true },
     message: { type: String },
     meta: {
