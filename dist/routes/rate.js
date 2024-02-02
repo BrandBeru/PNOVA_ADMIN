@@ -20,7 +20,7 @@ const passport_1 = __importDefault(require("passport"));
 const auth_handler_1 = require("../middlewares/auth.handler");
 const service = new rate_service_1.default();
 const router = (0, express_1.Router)();
-router.post("/", (0, validator_handler_1.default)(rate_schema_1.createRateSchema, "body"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", (0, validator_handler_1.default)(rate_schema_1.createRateSchema, "body"), passport_1.default.authenticate("jwt"), (0, auth_handler_1.checkRoles)("client", "admin"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.user.sub;
         const body = req.body;

@@ -94,10 +94,10 @@ class AuthService {
     };
     return await this.sendEmail(mail);
   }
-  async sendEmailActivation(id: string){
-    const user = await service.getById(id);
+  async sendEmailActivation(email: string){
+    const user = await service.findByEmailForVerification(email);
     if (!user) {
-      throw boom.notFound();
+      throw boom.notFound('Email is already verified or does not exists.');
     }
     const payload = { sub: user._id };
     const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "15min" });

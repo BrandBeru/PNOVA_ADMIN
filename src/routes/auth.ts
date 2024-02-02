@@ -4,8 +4,6 @@ import express from "express";
 import { checkRoles } from "../middlewares/auth.handler";
 import validatorHandler from "../middlewares/validator.handler";
 import { activateUserSchema, sendEmailSchema } from "../schemas/auth.schema";
-import UserService from "../services/user.service";
-import { createUserSchema } from "../schemas/users.schema";
 
 const router = express.Router();
 const service = new AuthService();

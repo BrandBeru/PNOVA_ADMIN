@@ -101,11 +101,11 @@ class AuthService {
             return yield this.sendEmail(mail);
         });
     }
-    sendEmailActivation(id) {
+    sendEmailActivation(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield service.getById(id);
+            const user = yield service.findByEmailForVerification(email);
             if (!user) {
-                throw boom_1.default.notFound();
+                throw boom_1.default.notFound('Email is already verified or does not exists.');
             }
             const payload = { sub: user._id };
             const token = jsonwebtoken_1.default.sign(payload, config_1.default.jwtSecret, { expiresIn: "15min" });

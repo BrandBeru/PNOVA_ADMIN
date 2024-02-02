@@ -29,6 +29,10 @@ class UserService{
     const user = await User.findOne({$and: [{email: email}, {"meta.isActive":true}]})
     return user
   }
+  async findByEmailForVerification(email: string){
+    const user = await User.findOne({$and: [{email: email}, {"meta.isActive":false}]})
+    return user
+  }
   async findOne(id: string){
     const user = await User.findOne({_id: id})
     return user

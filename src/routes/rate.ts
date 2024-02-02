@@ -12,7 +12,7 @@ router.post(
   "/",
   validatorHandler(createRateSchema, "body"),
   passport.authenticate("jwt"),
-  checkRoles("client"),
+  checkRoles("client", "admin"),
   async (req:any, res, next) => {
     try {
       const userId = req.user.sub

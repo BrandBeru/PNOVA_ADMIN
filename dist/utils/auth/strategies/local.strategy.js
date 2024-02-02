@@ -14,12 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_service_1 = __importDefault(require("../../../services/auth.service"));
 const passport_local_1 = require("passport-local");
+const user_service_1 = __importDefault(require("../../../services/user.service"));
+const boom_1 = __importDefault(require("@hapi/boom"));
 const service = new auth_service_1.default();
+const userService = new user_service_1.default();
 const LocalStrategy = new passport_local_1.Strategy({
     usernameField: 'email',
     passwordField: 'password'
 }, (email, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const rta = yield userService.findByEmailForVerification(email);
+        if (rta) {
+            throw boom_1.default.forbidden('Email is unverified');
+        }
         const user = yield service.getUser(email, password);
         done(null, user);
     }

@@ -50,6 +50,12 @@ class UserService {
             return user;
         });
     }
+    findByEmailForVerification(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_model_1.User.findOne({ $and: [{ email: email }, { "meta.isActive": false }] });
+            return user;
+        });
+    }
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_model_1.User.findOne({ _id: id });
