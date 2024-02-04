@@ -12,7 +12,8 @@ const LocalStrategy = new Strategy({
   try{
     const rta = await userService.findByEmailForVerification(email);
     if(rta){
-      throw boom.forbidden('Email is unverified')
+      const rta = await service.sendEmailActivation(email)
+      throw boom.forbidden('Email is unverified, '+ rta)
     }
     const user = await service.getUser(email, password)
     done(null, user)
