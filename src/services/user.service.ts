@@ -52,9 +52,11 @@ class UserService{
     return clients
   }
   async create(user: IUser){
+    const profilePicture = `https://ui-avatars.com/api/?name=${user.name}+${user.lastName}&size=128&background=fff&color=bd9272`
     const hash = await bcrypt.hash(user.password.toString(), 10)
     const rta = await User.create({
       ...user,
+      profilePicture,
       password: hash
     })
     return rta

@@ -46,7 +46,7 @@ router.post("/", (0, validator_handler_1.default)(users_schema_1.createUserSchem
     try {
         const body = req.body;
         const user = yield service.create(body);
-        const rta = yield authService.sendEmailActivation(user._id);
+        const rta = yield authService.sendEmailActivation(user.email);
         res.status(201).json(rta);
     }
     catch (err) {

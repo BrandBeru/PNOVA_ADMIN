@@ -1,8 +1,7 @@
 import { Service } from "../db/models/service.model"
 class ServiceService {
   async create(body: IService){
-    await Service.create(body);
-    const services = await this.find()
+    const services = await Service.create(body);
     return services
   }
   async find(){

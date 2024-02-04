@@ -90,7 +90,7 @@ class AuthService {
             yield service.updateOne(user._id, { recoveryToken: token });
             const link = `${config_1.default.frontend_url}/recovery?token=${token}`;
             const mail = {
-                from: config_1.default.email_user,
+                from: '"PNOVA STUDIIOS" ' + config_1.default.email_user,
                 to: `${user.email}`,
                 subject: `PNOVA\\VIGE STUDIIOS - Reset your password`,
                 html: this.emailStructure(`Hola ${user.name} ${user.lastName},`, "Aqui esta el link para reestablecer tu contraseña, lamentamos cualquier inconveniente presentado.", { text: "Reset your password", url: link }, `Equipo PNOVA\VIGE, conoce mas en: <a class="link" href="https://pnovastudios.xyz/about">https://pnovastudios.xyz/about</a>`, user.email, `Este link solo sera valido por los proximos 15 minutos.
@@ -112,7 +112,7 @@ class AuthService {
             yield service.updateOne(user._id, { recoveryToken: token });
             const link = `${config_1.default.frontend_url}/activate?token=${token}`;
             const mail = {
-                from: config_1.default.email_user,
+                from: '"PNOVA STUDIIOS" ' + config_1.default.email_user,
                 to: `${user.email}`,
                 subject: `PNOVA\\VIGE STUDIIOS - Account activation`,
                 html: this.emailStructure(`Hola ${user.name} ${user.lastName},`, "Aqui esta el link para activar tu correo.", { text: "Activate your account", url: link }, `Equipo PNOVA\VIGE, conoce mas en: <a class="link" href="https://pnovastudios.xyz/about">https://pnovastudios.xyz/about</a>`, user.email, `Este link solo sera valido por los proximos 15 minutos.

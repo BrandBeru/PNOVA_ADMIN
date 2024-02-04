@@ -50,7 +50,7 @@ router.post(
     try {
       const body = req.body;
       const user = await service.create(body);
-      const rta = await authService.sendEmailActivation(user._id);
+      const rta = await authService.sendEmailActivation(user.email);
       res.status(201).json(rta);
     } catch (err) {
       next(err);

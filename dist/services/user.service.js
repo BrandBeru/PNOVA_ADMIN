@@ -84,8 +84,9 @@ class UserService {
     }
     create(user) {
         return __awaiter(this, void 0, void 0, function* () {
+            const profilePicture = `https://ui-avatars.com/api/?name=${user.name}+${user.lastName}&size=128&background=fff&color=bd9272`;
             const hash = yield bcryptjs_1.default.hash(user.password.toString(), 10);
-            const rta = yield user_model_1.User.create(Object.assign(Object.assign({}, user), { password: hash }));
+            const rta = yield user_model_1.User.create(Object.assign(Object.assign({}, user), { profilePicture, password: hash }));
             return rta;
         });
     }

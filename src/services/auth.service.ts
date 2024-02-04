@@ -76,7 +76,7 @@ class AuthService {
     await service.updateOne(user._id, { recoveryToken: token });
     const link = `${config.frontend_url}/recovery?token=${token}`;
     const mail = {
-      from: config.email_user,
+      from: '"PNOVA STUDIIOS" '+config.email_user,
       to: `${user.email}`,
       subject: `PNOVA\\VIGE STUDIIOS - Reset your password`,
       html: this.emailStructure(
@@ -104,7 +104,7 @@ class AuthService {
     await service.updateOne(user._id, { recoveryToken: token });
     const link = `${config.frontend_url}/activate?token=${token}`;
     const mail = {
-      from: config.email_user,
+      from: '"PNOVA STUDIIOS" '+config.email_user,
       to: `${user.email}`,
       subject: `PNOVA\\VIGE STUDIIOS - Account activation`,
       html: this.emailStructure(

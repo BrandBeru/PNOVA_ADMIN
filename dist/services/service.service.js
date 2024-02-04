@@ -13,8 +13,7 @@ const service_model_1 = require("../db/models/service.model");
 class ServiceService {
     create(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield service_model_1.Service.create(body);
-            const services = yield this.find();
+            const services = yield service_model_1.Service.create(body);
             return services;
         });
     }
