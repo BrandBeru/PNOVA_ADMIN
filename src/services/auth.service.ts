@@ -74,7 +74,7 @@ class AuthService {
     const payload = { sub: user._id };
     const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "15min" });
     await service.updateOne(user._id, { recoveryToken: token });
-    const link = `${config.frontend_url}/public/html/recovery.html?token=${token}`;
+    const link = `${config.frontend_url}/recovery?token=${token}`;
     const mail = {
       from: '"PNOVA STUDIIOS" '+config.email_user,
       to: `${user.email}`,
@@ -102,7 +102,7 @@ class AuthService {
     const payload = { sub: user._id };
     const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "15min" });
     await service.updateOne(user._id, { recoveryToken: token });
-    const link = `${config.frontend_url}/public/html/activate.html?token=${token}`;
+    const link = `${config.frontend_url}/activate?token=${token}`;
     const mail = {
       from: '"PNOVA STUDIIOS" '+config.email_user,
       to: `${user.email}`,
